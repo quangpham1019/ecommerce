@@ -3,7 +3,9 @@ package org.ecommerce.user.infrastructure.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -16,10 +18,12 @@ public class UserContextSecurityConfig {
         return http
                 .securityMatcher("/api/users/**")
                 .authorizeHttpRequests(c -> c.anyRequest().permitAll())
-                .securityContext(c -> c.disable())
-                .sessionManagement(c -> c.disable())
-                .requestCache(c -> c.disable())
+                .securityContext(c -> c.disable())  // Disable security context (for stateless APIs)
+                .sessionManagement(c -> c.disable())  // Disable session creation
+                .requestCache(c -> c.disable())  // Disable request cache (if not needed)
+                .csrf(csrf -> csrf.disable())
                 .build();
+
     }
 
 //

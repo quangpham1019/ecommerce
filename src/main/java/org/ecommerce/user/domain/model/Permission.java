@@ -1,30 +1,28 @@
 package org.ecommerce.user.domain.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.sql.Timestamp;
 
 @Entity
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
-public class User {
+public class Permission {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     @EqualsAndHashCode.Include
     private Long id;
 
-    private String username;
-    private String password;
-    private String email;
-
-    @CreationTimestamp
-    private Timestamp createdAt;
+    private String permissionName;
+    private String permissionDescription;
 
 }

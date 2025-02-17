@@ -2,7 +2,6 @@ package org.ecommerce.user.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
@@ -13,18 +12,26 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
-public class User {
+public class UserRole {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
     @EqualsAndHashCode.Include
     private Long id;
 
-    private String username;
-    private String password;
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    private User user;
 
-    @CreationTimestamp
-    private Timestamp createdAt;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    @ToString.Exclude
+    private Role role;
+
+    private Timestamp assignedAt;
+
+    @Enumerated(EnumType.STRING)
+    private UserRoleStatus status;
 
 }
