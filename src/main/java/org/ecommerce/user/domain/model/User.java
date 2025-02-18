@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Timestamp;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +23,8 @@ public class User {
 
     private String username;
     private String password;
+
+    @EqualsAndHashCode.Include
     private String email;
 
     @CreationTimestamp

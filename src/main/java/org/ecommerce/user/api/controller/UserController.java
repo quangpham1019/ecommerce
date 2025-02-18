@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -64,5 +62,11 @@ public class UserController {
                                            @RequestBody User user) {
         userPersistenceService.updatePartial((long)id, user);
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/saveAll")
+    public ResponseEntity<List<User>> saveAllUsers(@RequestBody List<User> users) {
+        List<User> savedUsers = userPersistenceService.saveAll(users);
+        return ResponseEntity.ok(savedUsers);
     }
 }

@@ -1,4 +1,4 @@
-package org.ecommerce.utils;
+package org.ecommerce.common.utils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 

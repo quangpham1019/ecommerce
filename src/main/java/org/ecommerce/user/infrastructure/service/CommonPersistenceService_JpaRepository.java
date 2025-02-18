@@ -1,5 +1,4 @@
 package org.ecommerce.user.infrastructure.service;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.ecommerce.user.infrastructure.service.interfaces.CommonPersistenceService;
 import org.springframework.beans.BeanWrapper;
@@ -8,12 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.ecommerce.utils.ObjectUtils.convertToMap;
+import static org.ecommerce.common.utils.ObjectUtils.convertToMap;
 
 public class CommonPersistenceService_JpaRepository<T, ID> implements CommonPersistenceService<T, ID> {
 
@@ -75,6 +73,6 @@ public class CommonPersistenceService_JpaRepository<T, ID> implements CommonPers
             }
         });
 
-        return repository.save(existingEntity);
+        return save(existingEntity);
     }
 }
