@@ -6,12 +6,12 @@ import org.ecommerce.user.infrastructure.service.interfaces.UserPersistenceServi
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserPersistenceServiceImpl extends CommonPersistenceServiceImpl<User, Long> implements UserPersistenceService {
+public class UserPersistenceService_JpaRepository extends CommonPersistenceService_JpaRepository<User, Long> implements UserPersistenceService {
 
-    private final UserRepository userJpaRepository;
+    private final UserRepository repository;
 
-    public UserPersistenceServiceImpl(UserRepository repository) {
+    public UserPersistenceService_JpaRepository(UserRepository repository) {
         super(repository);
-        this.userJpaRepository = repository;
+        this.repository = repository;
     }
 }
