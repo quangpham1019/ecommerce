@@ -23,12 +23,28 @@ public class UserPersistenceService_JpaRepository extends CommonPersistenceServi
         this.domainService = domainService;
     }
 
+    /**
+     * Saves a user, ensuring unique email validation.
+     * This method performs additional validation for unique email before saving the user.
+     *
+     * @param user the User object to be saved.
+     * @return the saved User object.
+     * @throws IllegalArgumentException If user provides an email that already exists in the database.
+     */
     @Override
     public User save(User user) {
         domainService.validateUniqueEmail(user.getEmail());
         return repository.save(user);
     }
 
+    /**
+     * Saves a list of users, ensuring unique email validation for each user.
+     * This method performs additional validation for unique emails before saving the users.
+     *
+     * @param users A list of User objects to be saved.
+     * @return List of saved User objects.
+     * @throws IllegalArgumentException If any user has an invalid email.
+     */
     @Override
     public List<User> saveAll(List<User> users) {
         domainService.validateUniqueEmail(users);

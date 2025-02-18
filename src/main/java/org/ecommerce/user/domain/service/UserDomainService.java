@@ -20,12 +20,31 @@ public class UserDomainService {
         this.repository = repository;
     }
 
+    /**
+     * Validates that the given email is unique.
+     *
+     * @param email The email address to check for uniqueness.
+     * @throws IllegalArgumentException if the email is already in use.
+     */
     public void validateUniqueEmail(String email) {
         if (repository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email is already in use.");
         }
     }
 
+    /**
+     * Validates that the provided list of users contains only unique email addresses.
+     *
+     * This method:
+     * <ul>
+     *   <li>Extracts emails from the given list of users.</li>
+     *   <li>Queries the database to check if any of the emails already exist.</li>
+     *   <li>Throws an exception if duplicate emails are found.</li>
+     * </ul>
+     *
+     * @param users The list of users whose emails need to be validated.
+     * @throws IllegalArgumentException if any of the provided emails already exist in the database.
+     */
     public void validateUniqueEmail(List<User> users) {
 
         // extract emails from current list of users

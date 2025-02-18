@@ -21,7 +21,7 @@ input_directory="src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/domain/model"
 
 # Set the output directory based on the package and context
 output_directory_impl="src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/infrastructure/service"
-output_directory_interface="src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/infrastructure/service/interface"
+output_directory_interface="src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/infrastructure/service/interfaces"
 
 # Create the output directory if it doesn't exist
 mkdir -p "$output_directory_impl"
