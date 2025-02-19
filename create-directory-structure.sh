@@ -30,7 +30,6 @@ mkdir -p "$ROOT_DIR/$CONTEXT_NAME/domain/service"
 mkdir -p "$ROOT_DIR/$CONTEXT_NAME/infrastructure/config"
 mkdir -p "$ROOT_DIR/$CONTEXT_NAME/infrastructure/repository"
 mkdir -p "$ROOT_DIR/$CONTEXT_NAME/infrastructure/security"
-mkdir -p "$ROOT_DIR/$CONTEXT_NAME/infrastructure/service"
 
 # Provide feedback
 echo "Directory structure created for context '$CONTEXT_NAME' of project package '$PROJECT_PACKAGE'."

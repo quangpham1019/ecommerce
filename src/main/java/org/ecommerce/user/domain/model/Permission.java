@@ -1,17 +1,16 @@
 package org.ecommerce.user.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Set;
 
 @Entity
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class Permission {
@@ -22,7 +21,11 @@ public class Permission {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @EqualsAndHashCode.Include
     private String permissionName;
     private String permissionDescription;
 
+    @OneToMany(mappedBy = "permission", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<RolePermission> rolePermissions;
 }

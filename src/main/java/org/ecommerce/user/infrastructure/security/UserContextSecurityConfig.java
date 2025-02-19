@@ -26,7 +26,6 @@ public class UserContextSecurityConfig {
 
     }
 
-//
 //    @Bean
 //    SecurityFilterChain securityFilterChain(HttpSecurity http,
 //                                            OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2LoginHandler,

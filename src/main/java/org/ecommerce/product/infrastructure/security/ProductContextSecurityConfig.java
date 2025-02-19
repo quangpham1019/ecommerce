@@ -16,13 +16,13 @@ public class ProductContextSecurityConfig {
         return http
                 .securityMatcher("/api/products/**")
                 .authorizeHttpRequests(c -> c.anyRequest().permitAll())
-                .securityContext(c -> c.disable())
-                .sessionManagement(c -> c.disable())
-                .requestCache(c -> c.disable())
+                .securityContext(c -> c.disable())  // Disable security context (for stateless APIs)
+                .sessionManagement(c -> c.disable())  // Disable session creation
+                .requestCache(c -> c.disable())  // Disable request cache (if not needed)
+                .csrf(csrf -> csrf.disable())
                 .build();
     }
 
-//
 //    @Bean
 //    SecurityFilterChain securityFilterChain(HttpSecurity http,
 //                                            OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2LoginHandler,

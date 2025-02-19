@@ -2,6 +2,7 @@ package org.ecommerce.user.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
@@ -9,7 +10,6 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class UserRole {
@@ -29,9 +29,23 @@ public class UserRole {
     @ToString.Exclude
     private Role role;
 
+    @CreationTimestamp
     private Timestamp assignedAt;
 
     @Enumerated(EnumType.STRING)
     private UserRoleStatus status;
 
+    public UserRole(User user, Role role, UserRoleStatus status) {
+        this.user = user;
+        this.role = role;
+        this.status = status;
+    }
+
+    public void deactivate() {
+        this.status = UserRoleStatus.INACTIVE;
+    }
+
+    public void activate() {
+        this.status = UserRoleStatus.ACTIVE;
+    }
 }

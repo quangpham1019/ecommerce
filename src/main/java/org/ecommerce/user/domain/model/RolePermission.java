@@ -2,6 +2,7 @@ package org.ecommerce.user.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
@@ -10,7 +11,6 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class RolePermission {
@@ -30,6 +30,7 @@ public class RolePermission {
     @ToString.Exclude
     private Role role;
 
+    @CreationTimestamp
     private Timestamp assignedAt;
 
     @Enumerated(EnumType.STRING)
