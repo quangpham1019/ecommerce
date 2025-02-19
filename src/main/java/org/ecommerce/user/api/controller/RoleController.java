@@ -32,7 +32,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void>  deleteRoleById(@RequestParam("id") Long id) {
+    public ResponseEntity<Void>  deleteRoleById(@PathVariable Long id) {
         roleApplicationService.deleteRoleById(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }

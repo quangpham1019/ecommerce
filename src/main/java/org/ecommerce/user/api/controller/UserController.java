@@ -44,45 +44,22 @@ public class UserController {
         return ResponseEntity.ok(userApplicationService.registerUser(user));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@RequestParam Long userId) {
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
 
         userApplicationService.deleteById(userId);
-        return ResponseEntity.ok("User deleted successfully");
+        return ResponseEntity.noContent().build(); // 204 No Content
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id,
                                            @RequestBody User user) {
-        userApplicationService.updatePartial(id, user);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userApplicationService.updatePartial(id, user));
     }
 
     @PostMapping("/saveAll")
     public ResponseEntity<List<User>> registerUsers(@RequestBody List<User> users) {
-        List<User> registeredUsers = userApplicationService.registerUsers(users);
-        return ResponseEntity.ok(registeredUsers);
+        return ResponseEntity.ok(userApplicationService.registerUsers(users));
     }
 
-
-    @GetMapping("/userRoles")
-    public ResponseEntity<List<UserRole>> getUserRoles() {
-        return ResponseEntity.ok(userApplicationService.getUserRoles());
-    }
-
-    @GetMapping("/{userId}/roles")
-    public ResponseEntity<List<UserRole>> getUserRoles(@PathVariable Long userId) {
-        return ResponseEntity.ok(userApplicationService.getUserRolesByUserId(userId));
-    }
-
-    @PostMapping("/{userId}/roles/{roleId}")
-    public ResponseEntity<UserRole> addRoleToUser(@PathVariable Long userId, @PathVariable Long roleId) {
-        return ResponseEntity.ok(userApplicationService.addRoleToUser(userId, roleId));
-    }
-
-    @DeleteMapping("/{userId}/roles/{roleId}")
-    public ResponseEntity<String> removeRoleFromUser(@PathVariable Long userId, @PathVariable Long roleId) {
-        userApplicationService.removeRoleFromUser(userId, roleId);
-        return ResponseEntity.ok("Role deleted successfully");
-    }
 }

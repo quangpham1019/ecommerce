@@ -12,6 +12,7 @@ import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRoleRepository;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,13 +29,15 @@ public class UserApplicationService {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final UserDomainService userDomainService;
+    private final SecurityExpressionHandler webSecurityExpressionHandler;
 
     public UserApplicationService(UserRepository userRepository, RoleRepository roleRepository,
-                                  UserRoleRepository userRoleRepository, UserDomainService userDomainService) {
+                                  UserRoleRepository userRoleRepository, UserDomainService userDomainService, SecurityExpressionHandler webSecurityExpressionHandler) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.userDomainService = userDomainService;
+        this.webSecurityExpressionHandler = webSecurityExpressionHandler;
     }
 
     /**
@@ -76,6 +79,7 @@ public class UserApplicationService {
      * @param userId the ID of the user to delete
      * @throws IllegalArgumentException if no user exists with the given ID
      */
+    @Transactional
     public void deleteById(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new IllegalArgumentException("User not found");
@@ -110,7 +114,7 @@ public class UserApplicationService {
             }
         });
 
-        return userRepository.save(existingEntity);
+        return existingEntity;
     }
 
     /**
@@ -133,6 +137,7 @@ public class UserApplicationService {
      * @return the created or reactivated {@code UserRole}
      * @throws IllegalArgumentException if the user or role does not exist, or if the role is already assigned and active
      */
+    @Transactional
     public UserRole addRoleToUser(Long userId, Long roleId) {
 
         Optional<UserRole> userRole = userRoleRepository.findByUser_IdAndRole_Id(userId, roleId);
@@ -143,7 +148,7 @@ public class UserApplicationService {
             if (currentUserRole.getStatus().equals(UserRoleStatus.ACTIVE)) throw new IllegalArgumentException("User already has this role");
 
             currentUserRole.activate();
-            return userRoleRepository.save(currentUserRole);
+            return currentUserRole;
         } else {
 
             User user = userRepository.findById(userId).orElseThrow(
@@ -180,7 +185,6 @@ public class UserApplicationService {
         if (currentUserRole.getStatus().equals(UserRoleStatus.INACTIVE)) throw new IllegalArgumentException("The role is already inactive and cannot be removed.");
 
         userRole.get().deactivate();
-        userRoleRepository.save(userRole.get());
     }
 
     /**
