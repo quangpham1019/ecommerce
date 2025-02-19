@@ -38,12 +38,13 @@ public class UserDomainService {
      * This method:
      * <ul>
      *   <li>Extracts emails from the given list of users.</li>
+     *   <li>Throws an exception if there are duplicate emails within the list.</li>
      *   <li>Queries the database to check if any of the emails already exist.</li>
      *   <li>Throws an exception if duplicate emails are found.</li>
      * </ul>
      *
      * @param users The list of users whose emails need to be validated.
-     * @throws IllegalArgumentException if any of the provided emails already exist in the database.
+     * @throws IllegalArgumentException if any of the provided emails is duplicate (either within the list or in the database).
      */
     public void validateUniqueEmail(List<User> users) {
 
@@ -52,6 +53,10 @@ public class UserDomainService {
                 .stream()
                 .map(User::getEmail)
                 .collect(Collectors.toSet());
+
+        if (users.size() != newEmails.size()) {
+            throw new IllegalArgumentException("There are duplicate emails in list.");
+        }
 
         // query the database to identify existing emails within the database
         Set<String> duplicateEmails = new HashSet<>(repository.findEmailsByEmails(newEmails));

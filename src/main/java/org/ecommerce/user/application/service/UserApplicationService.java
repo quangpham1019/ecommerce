@@ -37,21 +37,45 @@ public class UserApplicationService {
         this.userDomainService = userDomainService;
     }
 
+    /**
+     * Retrieves all users from the database.
+     *
+     * @return a list of all users
+     */
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
+    /**
+     * Persists a new user in the database.
+     *
+     * @param user the user entity to be persisted
+     * @return the persisted user
+     * @throws IllegalArgumentException if the provided email already exists
+     */
     public User registerUser(User user) {
         userDomainService.validateUniqueEmail(user.getEmail());
         return userRepository.save(user);
     }
 
+    /**
+     * Persists a list of users in the database.
+     *
+     * @param users the list of users to persist
+     * @return the persisted list of users
+     * @throws IllegalArgumentException if any email in the list is a duplicate (either within the list or in the database)
+     */
     public List<User> registerUsers(List<User> users) {
         userDomainService.validateUniqueEmail(users);
         return userRepository.saveAll(users);
     }
 
-
+    /**
+     * Deletes a user by ID.
+     *
+     * @param userId the ID of the user to delete
+     * @throws IllegalArgumentException if no user exists with the given ID
+     */
     public void deleteById(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new IllegalArgumentException("User not found");
@@ -59,10 +83,21 @@ public class UserApplicationService {
         userRepository.deleteById(userId);
     }
 
+    /**
+     * Updates specific fields of a user entity.
+     * <p>
+     * Only the non-null fields in the provided {@code User} object are updated.
+     * </p>
+     *
+     * @param id the ID of the user to update
+     * @param user the user object containing updated fields
+     * @return the updated user entity
+     * @throws IllegalArgumentException if the user does not exist
+     */
     @Transactional
     public User updatePartial(Long id, User user) {
         User existingEntity = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // Convert the user object into a map of non-null fields
         Map<String, Object> updates = convertToMap(user);
@@ -78,15 +113,27 @@ public class UserApplicationService {
         return userRepository.save(existingEntity);
     }
 
+    /**
+     * Assigns a role to a user.
+     * <p>
+     * If a {@code UserRole} with the given {@code userId} and {@code roleId} already exists:
+     * <ul>
+     *   <li>If the current status is {@code ACTIVE}, an error is thrown.</li>
+     *   <li>If the current status is {@code INACTIVE}, it is updated to {@code ACTIVE}.</li>
+     * </ul>
+     * If no existing {@code UserRole} is found:
+     * <ul>
+     *   <li>Verifies that both the user and role exist.</li>
+     *   <li>If either does not exist, an error is thrown.</li>
+     *   <li>Creates and saves a new {@code UserRole} with an {@code ACTIVE} status.</li>
+     * </ul>
+     *
+     * @param userId the ID of the user to whom the role is assigned
+     * @param roleId the ID of the role being assigned
+     * @return the created or reactivated {@code UserRole}
+     * @throws IllegalArgumentException if the user or role does not exist, or if the role is already assigned and active
+     */
     public UserRole addRoleToUser(Long userId, Long roleId) {
-        // check if userId and roleId exists in userRole table
-        // if yes,
-            // if status is ACTIVE, return error
-            // if status is INACTIVE, change status to ACTIVE
-        // else
-            // check if userId and roleId exist in their respective tables
-            // if either does not exist, throw errors
-            // save the new userRole with status ACTIVE
 
         Optional<UserRole> userRole = userRoleRepository.findByUser_IdAndRole_Id(userId, roleId);
 
@@ -110,6 +157,16 @@ public class UserApplicationService {
         }
     }
 
+    /**
+     * Removes a role from a user by updating the {@code UserRole} status to {@code INACTIVE}.
+     * <p>
+     * If the {@code UserRole} does not exist, or is already {@code INACTIVE}, an exception is thrown.
+     * Otherwise, the status is changed to {@code INACTIVE} and the update is persisted.
+     * </p>
+     * @param userId the ID of the user from whom the role is removed
+     * @param roleId the ID of the role being removed
+     * @throws IllegalArgumentException if the UserRole does not exist, or the UserRole's status is INACTIVE.
+     */
     @Transactional
     public void removeRoleFromUser(Long userId, Long roleId) {
         Optional<UserRole> userRole = userRoleRepository.findByUser_IdAndRole_Id(userId, roleId);
@@ -126,10 +183,22 @@ public class UserApplicationService {
         userRoleRepository.save(userRole.get());
     }
 
+    /**
+     * Retrieves all user-role associations from the database.
+     *
+     * @return a list of all {@code UserRole} entities
+     */
     public List<UserRole> getUserRoles() {
         return userRoleRepository.findAll();
     }
 
+    /**
+     * Retrieves all roles associated with a specific user.
+     *
+     * @param userId the ID of the user
+     * @return a list of {@code UserRole} entities associated with the given user ID
+     * @throws IllegalArgumentException if no user exists with the given ID
+     */
     public List<UserRole> getUserRolesByUserId(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new IllegalArgumentException("User not found");
