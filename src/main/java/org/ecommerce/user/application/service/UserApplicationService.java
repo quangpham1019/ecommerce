@@ -1,8 +1,9 @@
 package org.ecommerce.user.application.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotNull;
-import lombok.RequiredArgsConstructor;
+import org.ecommerce.user.application.dto.UserCreateDTO;
+import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.domain.model.Role;
 import org.ecommerce.user.domain.model.User;
 import org.ecommerce.user.domain.model.UserRole;
@@ -13,7 +14,6 @@ import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRoleRepository;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,13 +30,18 @@ public class UserApplicationService {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final UserDomainService userDomainService;
+    private final UserMapper userMapper;
 
-    public UserApplicationService(UserRepository userRepository, RoleRepository roleRepository,
-                                  UserRoleRepository userRoleRepository, UserDomainService userDomainService) {
+    public UserApplicationService(UserRepository userRepository,
+                                  RoleRepository roleRepository,
+                                  UserRoleRepository userRoleRepository,
+                                  UserDomainService userDomainService,
+                                  UserMapper userMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.userDomainService = userDomainService;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -49,15 +54,19 @@ public class UserApplicationService {
     }
 
     /**
-     * Persists a new user in the database.
+     * Takes a UserCreateDTO, persists a new user in the database, and return a UserResponseDTO.
      *
-     * @param user the user entity to be persisted
-     * @return the persisted user
+     * @param userCreateDTO the userCreateDTO object, containing information of the user entity to be persisted
+     * @return a userResponseDTO object, containing information of the persisted user
      * @throws IllegalArgumentException if the provided email already exists
      */
-    public User registerUser(User user) {
-        userDomainService.validateUniqueEmail(user.getEmail());
-        return userRepository.save(user);
+    public UserResponseDTO registerUser(UserCreateDTO userCreateDTO) {
+        userDomainService.validateUniqueEmail(userCreateDTO.getEmail());
+
+        User user = userMapper.toEntity(userCreateDTO);
+        User registeredUser = userRepository.save(user);
+
+        return userMapper.toResponseDto(registeredUser);
     }
 
     /**

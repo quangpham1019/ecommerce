@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
+import org.ecommerce.user.application.dto.UserCreateDTO;
+import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.service.UserApplicationService;
 import org.ecommerce.user.domain.model.User;
-import org.ecommerce.user.domain.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,8 @@ public class UserController {
         this.userApplicationService = userApplicationService;
     }
 
+
+
     @Operation(
             summary = "Get all users",
             description = "Fetch a list of all registered users",
@@ -35,13 +39,14 @@ public class UserController {
     )
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
+
         return ResponseEntity.ok(userApplicationService.getUsers());
     }
 
-
     @PostMapping
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        return ResponseEntity.ok(userApplicationService.registerUser(user));
+    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {
+
+        return ResponseEntity.ok(userApplicationService.registerUser(userCreateDTO));
     }
 
     @DeleteMapping("/{userId}")

@@ -1,5 +1,8 @@
 package org.ecommerce.UnitTests;
 
+import org.ecommerce.user.application.dto.UserCreateDTO;
+import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.application.service.UserApplicationService;
 import org.ecommerce.user.domain.model.Role;
 import org.ecommerce.user.domain.model.User;
@@ -13,12 +16,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -39,6 +40,8 @@ public class UserApplicationServiceTest {
     private UserRoleRepository userRoleRepository;
     @Mock
     private UserDomainService userDomainService;
+    @Mock
+    private UserMapper userMapper;
 
     @InjectMocks
     private UserApplicationService userApplicationService;
@@ -68,51 +71,46 @@ public class UserApplicationServiceTest {
     }
 
     @Test
-    void registerUser_ShouldRegisterUser_WhenEmailIsUnique() {
+    void registerUser_ShouldRegisterAndReturnUser_WhenEmailIsUnique() {
         // Arrange
+        UserCreateDTO newUserCreateDTO = new UserCreateDTO("jim", "jimPass", "jim@gmail.com");
         User newUser = new User("jim", "jimPass", "jim@gmail.com");
+        UserResponseDTO newUserResponseDTO = new UserResponseDTO(1L, "jim", "jim@gmail.com");
+
+        doNothing().when(userDomainService).validateUniqueEmail(newUserCreateDTO.getEmail());
+        when(userMapper.toEntity(newUserCreateDTO)).thenReturn(newUser);
         when(userRepository.save(newUser)).thenReturn(newUser);
-        doNothing().when(userDomainService).validateUniqueEmail(newUser.getEmail());
+        when(userMapper.toResponseDto(newUser)).thenReturn(newUserResponseDTO);
 
         // Act
-        User registeredUser = userApplicationService.registerUser(newUser);
+        UserResponseDTO registeredUser = userApplicationService.registerUser(newUserCreateDTO);
 
         // Assert
+        assertEquals(newUserResponseDTO, registeredUser);
+        verify(userDomainService).validateUniqueEmail(newUserCreateDTO.getEmail());
+        verify(userMapper).toEntity(newUserCreateDTO);
+        verify(userMapper).toResponseDto(newUser);
         verify(userRepository).save(newUser);
     }
-
-    @Test
-    void registerUser_ShouldReturnRegisteredUser_WhenEmailIsUnique() {
-
-        // Arrange
-        User newUser = new User("jim", "jimPass", "jim@gmail.com");
-        when(userRepository.save(newUser)).thenReturn(newUser);
-
-        // Act
-        User registeredUser = userApplicationService.registerUser(newUser);
-
-        // Assert
-        assertEquals("jim", registeredUser.getUsername());
-        assertEquals("jimPass", registeredUser.getPassword());
-        assertEquals("jim@gmail.com", registeredUser.getEmail());
-        verify(userDomainService).validateUniqueEmail(newUser.getEmail());
-        verify(userRepository).save(newUser);
-    }
-
     @Test
     void registerUser_ShouldThrowException_WhenEmailAlreadyExists() {
         // Arrange
         String existingEmail = "jim@gmail.com";
-        User newUser = new User("jim", "jimPass", existingEmail);
-        doThrow(new IllegalArgumentException("Email is already in use")).when(userDomainService).validateUniqueEmail(existingEmail);
+        UserCreateDTO newUserCreateDTO = new UserCreateDTO("jim", "jimPass", existingEmail);
+        doThrow(new IllegalArgumentException("Email is already in use"))
+                .when(userDomainService).validateUniqueEmail(existingEmail);
 
         // Act
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> userApplicationService.registerUser(newUser));
+        Exception exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> userApplicationService.registerUser(newUserCreateDTO));
 
         // Assert
         assertEquals("Email is already in use", exception.getMessage());
-        verify(userDomainService).validateUniqueEmail(newUser.getEmail());
-        verify(userRepository, never()).save(newUser);
+        verify(userDomainService).validateUniqueEmail(newUserCreateDTO.getEmail());
+        verify(userMapper, never()).toEntity(any(UserCreateDTO.class));
+        verify(userMapper, never()).toResponseDto(any(User.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @ParameterizedTest
@@ -120,15 +118,17 @@ public class UserApplicationServiceTest {
     @ValueSource(strings = {"", "   "})
     void registerUser_ShouldThrowException_WhenEmailIsNullOrEmpty(String invalidEmail) {
         // Arrange
-        User newUser = new User("jim", "jimPass", invalidEmail);
+        UserCreateDTO newUserCreateDTO = new UserCreateDTO("jim", "jimPass", invalidEmail);
         doThrow(new IllegalArgumentException("Email cannot be null or empty")).when(userDomainService).validateUniqueEmail(invalidEmail);
 
         // Act
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> userApplicationService.registerUser(newUser));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> userApplicationService.registerUser(newUserCreateDTO));
 
         // Assert
         assertEquals("Email cannot be null or empty", exception.getMessage());
-        verify(userDomainService).validateUniqueEmail(invalidEmail);
+        verify(userDomainService).validateUniqueEmail(newUserCreateDTO.getEmail());
+        verify(userMapper, never()).toEntity(any(UserCreateDTO.class));
+        verify(userMapper, never()).toResponseDto(any(User.class));
         verify(userRepository, never()).save(any(User.class));
     }
 
