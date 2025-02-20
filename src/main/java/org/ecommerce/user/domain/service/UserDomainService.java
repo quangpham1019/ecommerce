@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,8 +28,9 @@ public class UserDomainService {
      * @throws IllegalArgumentException if the email is already in use.
      */
     public void validateUniqueEmail(String email) {
+        if (Objects.isNull(email) || email.trim().isEmpty()) throw new IllegalArgumentException("Email cannot be null or empty");
         if (repository.existsByEmail(email)) {
-            throw new IllegalArgumentException("Email is already in use.");
+            throw new IllegalArgumentException("Email is already in use");
         }
     }
 

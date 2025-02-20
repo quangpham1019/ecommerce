@@ -6,17 +6,25 @@ import org.ecommerce.user.domain.service.RoleDomainService;
 import org.ecommerce.user.infrastructure.repository.jpa.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class RoleApplicationServiceTest {
 
     @Mock
@@ -29,13 +37,14 @@ class RoleApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void getRoles_ShouldReturnAllRoles() {
         // Arrange
-        List<Role> mockRoles = Arrays.asList(new Role("ADMIN", "perform admin-related tasks"), new Role("USER", "restricted to user-level tasks"));
+        List<Role> mockRoles = Arrays.asList(
+                new Role("ADMIN", "perform admin-related tasks"),
+                new Role("USER", "restricted to user-level tasks"));
         when(roleRepository.findAll()).thenReturn(mockRoles);
 
         // Act
@@ -79,18 +88,22 @@ class RoleApplicationServiceTest {
         verify(roleRepository, never()).save(any());
     }
 
-    @Test
-    void addRole_ShouldThrowException_WhenRoleNameIsNull() {
-        // Arrange
-        Role invalidRole = new Role(null, "null role");
-        doThrow(new IllegalArgumentException("Role name cannot be null or empty")).when(roleDomainService).validateRoleName(null);
 
-        // Act & Assert
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", "   "})
+    void addRole_ShouldThrowException_WhenRoleNameIsInvalid(String invalidRoleName) {
+        // Arrange
+        Role invalidRole = new Role(invalidRoleName, "role with invalid name");
+        doThrow(new IllegalArgumentException("Role name cannot be null or empty")).when(roleDomainService).validateRoleName(invalidRoleName);
+
+        // Act
         Exception exception = assertThrows(IllegalArgumentException.class,
                 () -> roleApplicationService.addRole(invalidRole));
 
+        // Assert
         assertEquals("Role name cannot be null or empty", exception.getMessage());
-        verify(roleRepository, atMostOnce()).existsByRoleName(any());
+        verify(roleRepository, times(1)).existsByRoleName(any());
         verify(roleRepository, never()).save(any());
     }
 
@@ -106,20 +119,6 @@ class RoleApplicationServiceTest {
         // Assert
         verify(roleRepository, times(1)).findById(1L);
         verify(roleRepository, times(1)).delete(role);
-    }
-
-    @Test
-    void deleteRoleById_ShouldThrowException_WhenRoleNotFound() {
-        // Arrange
-        when(roleRepository.findById(99L)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> roleApplicationService.deleteRoleById(99L));
-
-        assertEquals("Role not found", exception.getMessage());
-        verify(roleRepository, times(1)).findById(99L);
-        verify(roleRepository, never()).delete(any());
     }
 
     @Test

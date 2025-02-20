@@ -1,6 +1,7 @@
 package org.ecommerce.user.application.service;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.ecommerce.user.domain.model.Role;
 import org.ecommerce.user.domain.model.User;
@@ -29,15 +30,13 @@ public class UserApplicationService {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final UserDomainService userDomainService;
-    private final SecurityExpressionHandler webSecurityExpressionHandler;
 
     public UserApplicationService(UserRepository userRepository, RoleRepository roleRepository,
-                                  UserRoleRepository userRoleRepository, UserDomainService userDomainService, SecurityExpressionHandler webSecurityExpressionHandler) {
+                                  UserRoleRepository userRoleRepository, UserDomainService userDomainService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.userDomainService = userDomainService;
-        this.webSecurityExpressionHandler = webSecurityExpressionHandler;
     }
 
     /**
@@ -177,12 +176,12 @@ public class UserApplicationService {
         Optional<UserRole> userRole = userRoleRepository.findByUser_IdAndRole_Id(userId, roleId);
 
         if (userRole.isEmpty()) {
-            throw new IllegalArgumentException("UserRole not found");
+            throw new IllegalArgumentException("User does not have this role");
         }
 
         UserRole currentUserRole = userRole.get();
 
-        if (currentUserRole.getStatus().equals(UserRoleStatus.INACTIVE)) throw new IllegalArgumentException("The role is already inactive and cannot be removed.");
+        if (currentUserRole.getStatus().equals(UserRoleStatus.INACTIVE)) throw new IllegalArgumentException("The role is already inactive and cannot be removed");
 
         userRole.get().deactivate();
     }
