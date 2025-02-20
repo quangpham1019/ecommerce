@@ -2,6 +2,18 @@
 
 This project aim to develop a backend service for an ecommerce platform similar to Amazon, with an emphasis on implementing the Domain-Driven Design (DDD) approach and eventually transitioning to a Microservices architecture.
 
+# ecommerce - Current Progress
+
+## **User Context**
+- Designing DTOs for User entity
+- Refactoring controllers, services to use UserDTOs
+- Create domain and app services for Role, Permission
+- Enforce RBAC authorization on endpoints
+
+## **Product Context**
+- Develop the business logic for adding, removing, updating products
+- Only sellers can add/update/remove products
+
 # ecommerce - Bounded Contexts
 
 This project is designed around the Domain-Driven Design (DDD) approach, with separate bounded contexts to encapsulate distinct areas of the e-commerce platform's domain. Each context has its own responsibilities and domain logic.
