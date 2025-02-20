@@ -26,8 +26,6 @@ public class UserController {
         this.userApplicationService = userApplicationService;
     }
 
-
-
     @Operation(
             summary = "Get all users",
             description = "Fetch a list of all registered users",
@@ -39,7 +37,6 @@ public class UserController {
     )
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
-
         return ResponseEntity.ok(userApplicationService.getUsers());
     }
 
