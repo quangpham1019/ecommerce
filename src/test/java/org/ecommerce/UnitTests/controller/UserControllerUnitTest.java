@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @ContextConfiguration(classes = {UserController.class, TestSecurityConfig.class}) // Override the @Import on main class
-public class UserControllerUT {
+public class UserControllerUnitTest {
 
     @Autowired
     private MockMvc mockMvc;
