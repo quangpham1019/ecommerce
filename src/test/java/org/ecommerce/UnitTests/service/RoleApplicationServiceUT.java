@@ -1,4 +1,4 @@
-package org.ecommerce.UnitTests;
+package org.ecommerce.UnitTests.service;
 
 import org.ecommerce.user.application.service.RoleApplicationService;
 import org.ecommerce.user.domain.model.Role;
@@ -8,24 +8,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RoleApplicationServiceTest {
+class RoleApplicationServiceUT {
 
     @Mock
     private RoleRepository roleRepository;

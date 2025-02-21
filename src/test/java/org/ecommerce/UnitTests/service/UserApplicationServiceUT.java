@@ -1,4 +1,4 @@
-package org.ecommerce.UnitTests;
+package org.ecommerce.UnitTests.service;
 
 import org.ecommerce.user.application.dto.UserCreateDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserApplicationServiceTest {
+public class UserApplicationServiceUT {
 
     @Mock
     private UserRepository userRepository;
