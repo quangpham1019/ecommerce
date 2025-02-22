@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -43,5 +44,23 @@ public class User {
 
     public boolean hasRole(Role role) {
         return userRoles.stream().anyMatch(userRole -> userRole.getRole().equals(role));
+    }
+
+    public UserRole addRole(Role role) {
+
+        Optional<UserRole> existingRole = userRoles.stream().filter(userRole -> userRole.getRole().equals(role)).findFirst();
+
+        if (existingRole.isPresent()) {
+            UserRole currentUserRole = existingRole.get();
+
+            if (currentUserRole.getStatus().equals(UserRoleStatus.ACTIVE)) throw new IllegalArgumentException("User already has this role");
+
+            currentUserRole.activate();
+            return currentUserRole;
+        } else {
+            UserRole newUserRole = new UserRole(this, role, UserRoleStatus.ACTIVE);
+            userRoles.add(newUserRole);
+            return newUserRole;
+        }
     }
 }

@@ -148,26 +148,14 @@ public class UserApplicationService {
     @Transactional
     public UserRole addRoleToUser(Long userId, Long roleId) {
 
-        Optional<UserRole> userRole = userRoleRepository.findByUser_IdAndRole_Id(userId, roleId);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+        Role role = roleRepository.findById(roleId).orElseThrow(
+                () -> new IllegalArgumentException("Role not found")
+        );
 
-        if (userRole.isPresent()) {
-            UserRole currentUserRole = userRole.get();
-
-            if (currentUserRole.getStatus().equals(UserRoleStatus.ACTIVE)) throw new IllegalArgumentException("User already has this role");
-
-            currentUserRole.activate();
-            return currentUserRole;
-        } else {
-
-            User user = userRepository.findById(userId).orElseThrow(
-                    () -> new IllegalArgumentException("User not found")
-            );
-            Role role = roleRepository.findById(roleId).orElseThrow(
-                    () -> new IllegalArgumentException("Role not found")
-            );
-
-            return userRoleRepository.save(new UserRole(user, role, UserRoleStatus.ACTIVE));
-        }
+        return user.addRole(role);
     }
 
     /**

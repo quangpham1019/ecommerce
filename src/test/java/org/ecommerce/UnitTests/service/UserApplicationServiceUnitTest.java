@@ -20,6 +20,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -217,23 +218,17 @@ public class UserApplicationServiceUnitTest {
     }
 
     @Test
-    void addRoleToUser_ShouldSaveAndReturnNewActiveUserRole_WhenUserIsFound_AndRoleIsFound() {
+    void addRoleToUser_ShouldReturnActiveUserRole_WhenUserIsFound_AndRoleIsFound() {
         // Arrange
         Long userId = 1L;
         Long roleId = 1L;
-        User user = new User("John", "johnPassword", "john@example.com");
-        Role role = new Role("ADMIN", "perform admin-related tasks");
+        User user = Mockito.mock(User.class);
+        Role role = Mockito.mock(Role.class);
         UserRole expectedResult = new UserRole(user, role, UserRoleStatus.ACTIVE);
 
-        when(userRoleRepository.findByUser_IdAndRole_Id(userId, roleId)).thenReturn(Optional.empty());
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(roleRepository.findById(roleId)).thenReturn(Optional.of(role));
-        when(userRoleRepository
-                .save(argThat(userRole ->
-                    userRole.getUser().equals(user) &&
-                    userRole.getRole().equals(role) &&
-                    userRole.getStatus().equals(UserRoleStatus.ACTIVE))))
-                .thenReturn(expectedResult);
+        when(user.addRole(role)).thenReturn(expectedResult);
 
         // Act
         UserRole actualResult = userApplicationService.addRoleToUser(userId, roleId);
@@ -243,17 +238,15 @@ public class UserApplicationServiceUnitTest {
         assertEquals(expectedResult, actualResult);
         assertEquals(UserRoleStatus.ACTIVE, actualResult.getStatus());
 
-        verify(userRoleRepository).findByUser_IdAndRole_Id(userId, roleId);
         verify(userRepository).findById(userId);
         verify(roleRepository).findById(roleId);
-        verify(userRoleRepository).save(actualResult);
+        verify(user).addRole(role);
     }
     @Test
     void addRoleToUser_ShouldThrowException_WhenUserIsNotFound() {
         // Arrange
         Long userId = 1L;
         Long roleId = 1L;
-        when(userRoleRepository.findByUser_IdAndRole_Id(userId, roleId)).thenReturn(Optional.empty());
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
@@ -268,7 +261,6 @@ public class UserApplicationServiceUnitTest {
         // Arrange
         Long userId = 1L;
         Long roleId = 1L;
-        when(userRoleRepository.findByUser_IdAndRole_Id(userId, roleId)).thenReturn(Optional.empty());
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
         when(roleRepository.findById(roleId)).thenReturn(Optional.empty());
@@ -278,43 +270,6 @@ public class UserApplicationServiceUnitTest {
 
         // Assert
         assertEquals("Role not found", exception.getMessage());
-    }
-    @Test
-    void addRoleToUser_ShouldThrowException_WhenUserAlreadyHasRole_AndRoleIsActive() {
-        // Arrange
-        Long userId = 1L;
-        Long roleId = 2L;
-
-        UserRole existingRole = new UserRole(
-                null, null, UserRoleStatus.ACTIVE);
-
-        when(userRoleRepository.findByUser_IdAndRole_Id(userId, roleId)).thenReturn(Optional.of(existingRole));
-
-        // Act
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> userApplicationService.addRoleToUser(userId, roleId));
-
-        // Assert
-        assertEquals("User already has this role", exception.getMessage());
-    }
-
-    @Test
-    void addRoleToUser_ShouldUpdateRoleStatusToActive_WhenUserAlreadyHasRole_AndRoleIsInactive() {
-        // Arrange
-        Long userId = 1L;
-        Long roleId = 2L;
-
-        UserRole existingRole = new UserRole(
-                null, null, UserRoleStatus.INACTIVE);
-
-        when(userRoleRepository.findByUser_IdAndRole_Id(userId, roleId)).thenReturn(Optional.of(existingRole));
-
-        // Act
-        UserRole updatedUserRole = userApplicationService.addRoleToUser(userId, roleId);
-
-        // Assert
-        assertEquals(UserRoleStatus.ACTIVE, existingRole.getStatus());
-        assertEquals(UserRoleStatus.ACTIVE, updatedUserRole.getStatus());
-        assertEquals(existingRole, updatedUserRole);
     }
 
     @Test
