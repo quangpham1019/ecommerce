@@ -107,12 +107,12 @@ public class UserApplicationService {
      * @throws IllegalArgumentException if the user does not exist
      */
     @Transactional
-    public User updatePartial(Long id, User user) {
-        User existingEntity = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    public UserResponseDTO updatePartial(Long id, UserCreateDTO userCreateDTO) {
+        UserResponseDTO existingEntity = userMapper.toResponseDto(userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found")));
 
         // Convert the user object into a map of non-null fields
-        Map<String, Object> updates = convertToMap(user);
+        Map<String, Object> updates = convertToMap(userCreateDTO);
 
         // Apply updates dynamically
         updates.forEach((field, value) -> {

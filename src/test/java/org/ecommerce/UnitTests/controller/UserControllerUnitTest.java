@@ -88,17 +88,17 @@ public class UserControllerUnitTest {
 
     @Test
     public void updateUser_ShouldReturnUpdatedUser_WhenUserExists_AndUserInputIsValid() throws Exception {
-        User updatedUser = new User("John Doe Updated", "updatedJohnPass", "john.doe.updated@example.com");
-        when(userApplicationService.updatePartial(anyLong(), any(User.class))).thenReturn(updatedUser);
+        UserResponseDTO userResponseDto = new UserResponseDTO(1L, "John Doe Updated", "john.doe.updated@example.com");
+        when(userApplicationService.updatePartial(anyLong(), any(UserCreateDTO.class))).thenReturn(userResponseDto);
 
         mockMvc.perform(put("/api/users/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedUser)))
+                        .content(objectMapper.writeValueAsString(userResponseDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("John Doe Updated"))
                 .andExpect(jsonPath("$.email").value("john.doe.updated@example.com"));
 
-        verify(userApplicationService, times(1)).updatePartial(eq(1L), any(User.class));
+        verify(userApplicationService, times(1)).updatePartial(eq(1L), any(UserCreateDTO.class));
     }
 
     @Test

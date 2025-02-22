@@ -190,19 +190,20 @@ public class UserApplicationServiceUnitTest {
         // Arrange
         Long userId = 1L;
         User existingUser = new User("old", "oldPassword", "old@email.com");
-        User updatedUser = new User(null, "newPassword", null);
-
+        UserCreateDTO userCreateDTO = new UserCreateDTO(null, "newPassword", "new@email.com");
+        UserResponseDTO expectedResult = new UserResponseDTO(1L, "old", "old@email.com");
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userMapper.toResponseDto(existingUser)).thenReturn(expectedResult);
 
         // Act
-        User result = userApplicationService.updatePartial(userId, updatedUser);
+        UserResponseDTO actualResult = userApplicationService.updatePartial(userId, userCreateDTO);
 
         // Assert
-        assertNotNull(result);
-        assertEquals("old", result.getUsername());
-        assertEquals("newPassword", result.getPassword());
-        assertEquals("old@email.com", result.getEmail());
+        assertNotNull(actualResult);
+        assertEquals("old", actualResult.getUsername());
+        assertEquals("new@email.com", actualResult.getEmail());
         verify(userRepository).findById(userId);
+        verify(userMapper).toResponseDto(existingUser);
     }
     @Test
     void updatePartial_shouldThrowException_WhenUserDoesNotExist() {
@@ -211,7 +212,7 @@ public class UserApplicationServiceUnitTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // Act
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> userApplicationService.updatePartial(userId, new User()));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> userApplicationService.updatePartial(userId, new UserCreateDTO()));
 
         // Assert
         assertEquals("User not found", exception.getMessage());

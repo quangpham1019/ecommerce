@@ -26,6 +26,7 @@ public class UserController {
         this.userApplicationService = userApplicationService;
     }
 
+    //region DEV-ONLY methods
     @Operation(
             summary = "Get all users",
             description = "Fetch a list of all registered users",
@@ -39,6 +40,11 @@ public class UserController {
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok(userApplicationService.getUsers());
     }
+    @PostMapping("/saveAll")
+    public ResponseEntity<List<User>> registerUsers(@RequestBody List<User> users) {
+        return ResponseEntity.ok(userApplicationService.registerUsers(users));
+    }
+    //endregion
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {
@@ -54,14 +60,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id,
-                                           @RequestBody User user) {
-        return ResponseEntity.ok(userApplicationService.updatePartial(id, user));
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id,
+                                           @RequestBody UserCreateDTO userCreateDTO) {
+        return ResponseEntity.ok(userApplicationService.updatePartial(id, userCreateDTO));
     }
 
-    @PostMapping("/saveAll")
-    public ResponseEntity<List<User>> registerUsers(@RequestBody List<User> users) {
-        return ResponseEntity.ok(userApplicationService.registerUsers(users));
-    }
 
 }
