@@ -2,6 +2,7 @@ package org.ecommerce.user.application.service;
 
 import jakarta.transaction.Transactional;
 import org.ecommerce.user.application.dto.UserCreateDTO;
+import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.domain.model.Role;
@@ -51,6 +52,14 @@ public class UserApplicationService {
      */
     public List<User> getUsers() {
         return userRepository.findAll();
+    }
+
+    public UserProfileDTO getUserProfile(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+
+        return userMapper.toUserProfileDTO(user);
     }
 
     /**

@@ -1,6 +1,7 @@
 package org.ecommerce.UnitTests.service;
 
 import org.ecommerce.user.application.dto.UserCreateDTO;
+import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.application.service.UserApplicationService;
@@ -69,6 +70,39 @@ public class UserApplicationServiceUnitTest {
         assertEquals("kyle", actualUsers.get(1).getUsername());
         assertEquals("yamalPass", actualUsers.get(2).getPassword());
         verify(userRepository).findAll();
+    }
+
+    @Test
+    void getUserProfile_ShouldReturnUserProfile_IfUserExists() {
+        // Arrange
+        Long userId = 1L;
+        User user = new User();
+        List<String> roles = Arrays.asList("USER", "ADMIN");
+        UserProfileDTO expectedResult = new UserProfileDTO(1L, "john", "john@gmail.com", roles);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userMapper.toUserProfileDTO(user)).thenReturn(expectedResult);
+
+        // Act
+        UserProfileDTO acutualResult = userApplicationService.getUserProfile(userId);
+
+        // Assert
+        assertEquals("john", acutualResult.getUsername());
+        assertEquals("john@gmail.com", acutualResult.getEmail());
+        assertTrue(acutualResult.getRoleNames().containsAll(roles));
+    }
+    @Test
+    void getUserProfile_ShouldThrowException_IfUserDoesNotExist() {
+        // Arrange
+        Long userId = 1L;
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // Act
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> userApplicationService.getUserProfile(userId));
+
+        // Assert
+        assertEquals("User not found", exception.getMessage());
     }
 
     @Test

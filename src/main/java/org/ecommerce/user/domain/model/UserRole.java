@@ -22,11 +22,13 @@ public class UserRole {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Include
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Include
     private Role role;
 
     @CreationTimestamp

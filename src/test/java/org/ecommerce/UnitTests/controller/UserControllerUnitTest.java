@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ecommerce.Config.TestSecurityConfig;
 import org.ecommerce.user.api.controller.UserController;
 import org.ecommerce.user.application.dto.UserCreateDTO;
+import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.service.UserApplicationService;
 import org.ecommerce.user.domain.model.User;
@@ -17,9 +18,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -59,6 +62,22 @@ public class UserControllerUnitTest {
                 .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
 
         verify(userApplicationService, times(1)).getUsers();
+    }
+
+    @Test
+    public void getUserProfile_ShouldReturnUserProfileDTO_IfUserExists() throws Exception {
+        Long userId = 1L;
+        List<String> roles = Arrays.asList("ADMIN", "USER");
+        UserProfileDTO userProfileDTO = new UserProfileDTO(1L, "John Doe", "john.doe@example.com", roles);
+        when(userApplicationService.getUserProfile(userId)).thenReturn(userProfileDTO);
+
+        mockMvc.perform(get("/api/users/{userId}", userId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("John Doe"))
+                .andExpect(jsonPath("$.email").value("john.doe@example.com"))
+                .andExpect(jsonPath("$.roleNames", containsInAnyOrder("ADMIN", "USER")));
+
+        verify(userApplicationService, times(1)).getUserProfile(userId);
     }
 
     @Test

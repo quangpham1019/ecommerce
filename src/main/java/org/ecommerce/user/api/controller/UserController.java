@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.ecommerce.user.application.dto.UserCreateDTO;
+import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.service.UserApplicationService;
 import org.ecommerce.user.domain.model.User;
@@ -45,6 +46,11 @@ public class UserController {
         return ResponseEntity.ok(userApplicationService.registerUsers(users));
     }
     //endregion
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserProfileDTO> getUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(userApplicationService.getUserProfile(userId));
+    }
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {

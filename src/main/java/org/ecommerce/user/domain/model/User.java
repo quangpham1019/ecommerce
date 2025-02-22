@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -42,10 +43,6 @@ public class User {
         this.email = email;
     }
 
-    public boolean hasRole(Role role) {
-        return userRoles.stream().anyMatch(userRole -> userRole.getRole().equals(role));
-    }
-
     public UserRole addRole(Role role) {
 
         Optional<UserRole> existingRole = userRoles.stream().filter(userRole -> userRole.getRole().equals(role)).findFirst();
@@ -62,5 +59,9 @@ public class User {
             userRoles.add(newUserRole);
             return newUserRole;
         }
+    }
+
+    public Set<UserRole> getUserRoles() {
+        return userRoles.stream().filter(ur -> ur.getStatus() == UserRoleStatus.ACTIVE).collect(Collectors.toSet());
     }
 }
