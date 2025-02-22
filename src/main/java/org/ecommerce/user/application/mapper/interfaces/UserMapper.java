@@ -3,6 +3,7 @@ import org.ecommerce.user.application.dto.UserCreateDTO;
 import org.ecommerce.user.application.dto.UserListDTO;
 import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.domain.model.Email;
 import org.ecommerce.user.domain.model.User;
 import org.ecommerce.user.domain.model.UserRole;
 import org.mapstruct.Mapper;
@@ -28,5 +29,13 @@ public interface UserMapper {
         return userRoles.stream()
                 .map(ur -> ur.getRole().getRoleName())
                 .collect(Collectors.toList());
+    }
+
+    default Email mapStringToEmail(String email) {
+        return email != null ? new Email(email) : null;
+    }
+
+    default String mapEmailToString(Email email) {
+        return email != null ? email.getAddress() : null;
     }
 }

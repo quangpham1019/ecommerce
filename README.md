@@ -4,6 +4,8 @@ This project aim to develop a backend service for an ecommerce platform similar 
 
 # ecommerce - Current Progress
 
+[Link to my detailed design process in Notion](https://sphenoid-soybean-e9a.notion.site/E-Commerce-Project-15bce826ff1180ebae6ef3ef200f857b)
+
 ## **User Context**
 - Designing DTOs for User entity
 - Refactoring controllers, services to use UserDTOs

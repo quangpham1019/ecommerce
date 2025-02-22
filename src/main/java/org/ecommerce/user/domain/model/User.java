@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class User {
     private String password;
 
     @EqualsAndHashCode.Include
-    private String email;
+    private Email email;
 
     @CreationTimestamp
     private Timestamp createdAt;
@@ -37,7 +38,7 @@ public class User {
     @JsonIgnore
     private Set<UserRole> userRoles;
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, Email email) {
         this.username = username;
         this.password = password;
         this.email = email;

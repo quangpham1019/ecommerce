@@ -7,6 +7,7 @@ import org.ecommerce.user.application.dto.UserCreateDTO;
 import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.service.UserApplicationService;
+import org.ecommerce.user.domain.model.Email;
 import org.ecommerce.user.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @ContextConfiguration(classes = {UserController.class, TestSecurityConfig.class}) // Override the @Import on main class
-public class UserControllerUnitTest {
+public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,7 +46,7 @@ public class UserControllerUnitTest {
 
     @BeforeEach
     public void setUp() {
-        user = new User("John Doe", "Zaq12wsx@j", "john.doe@example.com");
+        user = new User("John Doe", "Zaq12wsx@j", new Email("john.doe@example.com"));
         userCreateDTO = new UserCreateDTO("John Doe", "Zaq12wsx@j", "john.doe@example.com");
         userResponseDTO = new UserResponseDTO(1L, "John Doe", "john.doe@example.com");
     }
@@ -59,7 +59,7 @@ public class UserControllerUnitTest {
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].username").value("John Doe"))
-                .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
+                .andExpect(jsonPath("$[0].email.address").value("john.doe@example.com"));
 
         verify(userApplicationService, times(1)).getUsers();
     }
@@ -130,7 +130,7 @@ public class UserControllerUnitTest {
                         .content(objectMapper.writeValueAsString(users)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].username").value("John Doe"))
-                .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
+                .andExpect(jsonPath("$[0].email.address").value("john.doe@example.com"));
 
         verify(userApplicationService, times(1)).registerUsers(anyList());
     }

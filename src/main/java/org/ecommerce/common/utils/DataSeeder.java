@@ -1,9 +1,6 @@
 package org.ecommerce.common.utils;
 
-import org.ecommerce.user.domain.model.Role;
-import org.ecommerce.user.domain.model.User;
-import org.ecommerce.user.domain.model.UserRole;
-import org.ecommerce.user.domain.model.UserRoleStatus;
+import org.ecommerce.user.domain.model.*;
 import org.ecommerce.user.infrastructure.repository.jpa.RoleRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRoleRepository;
@@ -52,7 +49,7 @@ public class DataSeeder implements CommandLineRunner {
             String[] names = {"jack", "kim", "mike", "darcy", "korin"};
 
             for (String name : names) {
-                userRepository.save(new User(name, name+"Password", name+"@gmail.com"));
+                userRepository.save(new User(name, name+"Password", new Email(name+"@gmail.com")));
             }
         }
 

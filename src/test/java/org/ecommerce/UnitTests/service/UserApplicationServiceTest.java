@@ -5,10 +5,7 @@ import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.application.service.UserApplicationService;
-import org.ecommerce.user.domain.model.Role;
-import org.ecommerce.user.domain.model.User;
-import org.ecommerce.user.domain.model.UserRole;
-import org.ecommerce.user.domain.model.UserRoleStatus;
+import org.ecommerce.user.domain.model.*;
 import org.ecommerce.user.domain.service.UserDomainService;
 import org.ecommerce.user.infrastructure.repository.jpa.RoleRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
@@ -32,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserApplicationServiceUnitTest {
+public class UserApplicationServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -56,9 +53,9 @@ public class UserApplicationServiceUnitTest {
     void getUsers_ShouldReturnAllUsers() {
         // Arrange
         List<User> users = Arrays.asList(
-                new User("jim", "jimPass", "jim@gmail.com"),
-                new User("kyle", "kylePass", "kyle@gmail.com"),
-                new User("yamal", "yamalPass", "yamal@gmail.com")
+                new User("jim", "jimPass", new Email("jim@gmail.com")),
+                new User("kyle", "kylePass", new Email("kyle@gmail.com")),
+                new User("yamal", "yamalPass", new Email("yamal@gmail.com"))
         );
         when(userRepository.findAll()).thenReturn(users);
 
@@ -109,7 +106,7 @@ public class UserApplicationServiceUnitTest {
     void registerUser_ShouldRegisterAndReturnUser_WhenEmailIsUnique() {
         // Arrange
         UserCreateDTO newUserCreateDTO = new UserCreateDTO("jim", "jimPass", "jim@gmail.com");
-        User newUser = new User("jim", "jimPass", "jim@gmail.com");
+        User newUser = new User("jim", "jimPass", new Email("jim@gmail.com"));
         UserResponseDTO newUserResponseDTO = new UserResponseDTO(1L, "jim", "jim@gmail.com");
 
         doNothing().when(userDomainService).validateUniqueEmail(newUserCreateDTO.getEmail());
@@ -171,8 +168,8 @@ public class UserApplicationServiceUnitTest {
     void registerUsers_ShouldReturnUsers_WhenEmailsAreUnique() {
         // Arrange
         List<User> users = List.of(
-                new User("user1", "user1Pass", "user1@gmail.com"),
-                new User("user2", "user2Pass", "user2@gmail.com")
+                new User("user1", "user1Pass", new Email("user1@gmail.com")),
+                new User("user2", "user2Pass", new Email("user2@gmail.com"))
         );
         when(userRepository.saveAll(users)).thenReturn(users);
 
@@ -223,7 +220,7 @@ public class UserApplicationServiceUnitTest {
     void updatePartial_shouldReturnUpdatedUser_WhenUserIsFound() {
         // Arrange
         Long userId = 1L;
-        User existingUser = new User("old", "oldPassword", "old@email.com");
+        User existingUser = new User("old", "oldPassword", new Email("old@email.com"));
         UserCreateDTO userCreateDTO = new UserCreateDTO(null, "newPassword", "new@email.com");
         UserResponseDTO expectedResult = new UserResponseDTO(1L, "old", "old@email.com");
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));

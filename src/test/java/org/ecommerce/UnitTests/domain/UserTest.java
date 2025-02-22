@@ -8,15 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
-public class UserUnitTest {
+public class UserTest {
 
     @Test
     public void addRole_ShouldReturnNewActiveUserRole_WhenUserDoesNotHaveRole() {
