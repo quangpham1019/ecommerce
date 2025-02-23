@@ -1,4 +1,4 @@
-package org.ecommerce.user.domain.model;
+package org.ecommerce.user.domain.model.enums;
 
 public enum RolePermissionStatus {
     GRANTED,

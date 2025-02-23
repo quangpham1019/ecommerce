@@ -2,7 +2,7 @@ package org.ecommerce.user.application.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.ecommerce.user.domain.model.Email;
+import org.ecommerce.user.domain.model.value_objects.Email;
 
 @Getter
 @Setter

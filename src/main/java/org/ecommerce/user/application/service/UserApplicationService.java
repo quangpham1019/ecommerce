@@ -6,6 +6,7 @@ import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.domain.model.*;
+import org.ecommerce.user.domain.model.enums.UserRoleStatus;
 import org.ecommerce.user.domain.service.UserDomainService;
 import org.ecommerce.user.infrastructure.repository.jpa.RoleRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;

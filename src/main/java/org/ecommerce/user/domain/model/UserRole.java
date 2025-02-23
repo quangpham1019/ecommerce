@@ -2,6 +2,7 @@ package org.ecommerce.user.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.ecommerce.user.domain.model.enums.UserRoleStatus;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;

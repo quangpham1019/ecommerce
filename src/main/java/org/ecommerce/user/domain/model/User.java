@@ -3,10 +3,11 @@ package org.ecommerce.user.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.ecommerce.user.domain.model.enums.UserRoleStatus;
+import org.ecommerce.user.domain.model.value_objects.Email;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;

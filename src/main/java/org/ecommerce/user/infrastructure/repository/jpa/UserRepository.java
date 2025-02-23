@@ -1,6 +1,5 @@
 package org.ecommerce.user.infrastructure.repository.jpa;
 
-import org.ecommerce.user.domain.model.Email;
 import org.ecommerce.user.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

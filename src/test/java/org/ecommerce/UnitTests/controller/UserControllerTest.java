@@ -7,7 +7,7 @@ import org.ecommerce.user.application.dto.UserCreateDTO;
 import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.service.UserApplicationService;
-import org.ecommerce.user.domain.model.Email;
+import org.ecommerce.user.domain.model.value_objects.Email;
 import org.ecommerce.user.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

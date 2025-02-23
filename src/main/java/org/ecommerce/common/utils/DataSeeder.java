@@ -1,6 +1,8 @@
 package org.ecommerce.common.utils;
 
 import org.ecommerce.user.domain.model.*;
+import org.ecommerce.user.domain.model.enums.UserRoleStatus;
+import org.ecommerce.user.domain.model.value_objects.Email;
 import org.ecommerce.user.infrastructure.repository.jpa.RoleRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRoleRepository;

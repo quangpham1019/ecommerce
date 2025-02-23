@@ -3,7 +3,7 @@ package org.ecommerce.UnitTests.domain;
 import org.ecommerce.user.domain.model.Role;
 import org.ecommerce.user.domain.model.User;
 import org.ecommerce.user.domain.model.UserRole;
-import org.ecommerce.user.domain.model.UserRoleStatus;
+import org.ecommerce.user.domain.model.enums.UserRoleStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
