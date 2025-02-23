@@ -5,10 +5,7 @@ import org.ecommerce.user.application.dto.UserCreateDTO;
 import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.mapper.interfaces.UserMapper;
-import org.ecommerce.user.domain.model.Role;
-import org.ecommerce.user.domain.model.User;
-import org.ecommerce.user.domain.model.UserRole;
-import org.ecommerce.user.domain.model.UserRoleStatus;
+import org.ecommerce.user.domain.model.*;
 import org.ecommerce.user.domain.service.UserDomainService;
 import org.ecommerce.user.infrastructure.repository.jpa.RoleRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
@@ -111,7 +108,7 @@ public class UserApplicationService {
      * </p>
      *
      * @param id the ID of the user to update
-     * @param user the user object containing updated fields
+     * @param userCreateDTO the UserCreateDTO object containing updated fields
      * @return the updated user entity
      * @throws IllegalArgumentException if the user does not exist
      */
@@ -121,7 +118,9 @@ public class UserApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found")));
 
         // Convert the user object into a map of non-null fields
-        Map<String, Object> updates = convertToMap(userCreateDTO);
+        UserResponseDTO fromUserCreateDTO = userMapper.toResponseDto(userCreateDTO);
+
+        Map<String, Object> updates = convertToMap(fromUserCreateDTO);
 
         // Apply updates dynamically
         updates.forEach((field, value) -> {

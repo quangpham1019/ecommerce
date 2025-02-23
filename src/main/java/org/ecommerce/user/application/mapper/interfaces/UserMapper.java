@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public interface UserMapper {
     UserResponseDTO toResponseDto(User user);
     User toEntity(UserCreateDTO dto);
+    UserResponseDTO toResponseDto(UserCreateDTO dto);
 
     @Mapping(source = "userRoles", target = "roleNames", qualifiedByName = "mapUserRolesToRoleNames")
     UserProfileDTO toUserProfileDTO(User user);

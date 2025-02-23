@@ -12,6 +12,7 @@ import org.ecommerce.user.application.service.UserApplicationService;
 import org.ecommerce.user.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,7 +68,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id,
-                                           @RequestBody UserCreateDTO userCreateDTO) {
+                                                      @Valid @RequestBody UserCreateDTO userCreateDTO) {
         return ResponseEntity.ok(userApplicationService.updatePartial(id, userCreateDTO));
     }
 

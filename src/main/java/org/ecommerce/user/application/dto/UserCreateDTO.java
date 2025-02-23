@@ -2,6 +2,7 @@ package org.ecommerce.user.application.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.ecommerce.user.domain.model.Email;
 
 @Getter
 @Setter
@@ -10,6 +11,7 @@ import lombok.*;
 public class UserCreateDTO {
 
     @NotBlank(message = "Username is required")
+    @Size(min = 6, max = 20, message = "Username must be between 6 and 20 characters")
     private String username;
 
     @NotBlank(message = "Password is required")
@@ -18,7 +20,5 @@ public class UserCreateDTO {
             message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
     private String password;
 
-    @NotNull(message = "Email cannot be null")
-    @Email(message = "Invalid email format")
-    private String email;
+    private Email email;
 }

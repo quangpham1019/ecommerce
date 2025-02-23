@@ -47,7 +47,7 @@ public class UserControllerTest {
     @BeforeEach
     public void setUp() {
         user = new User("John Doe", "Zaq12wsx@j", new Email("john.doe@example.com"));
-        userCreateDTO = new UserCreateDTO("John Doe", "Zaq12wsx@j", "john.doe@example.com");
+        userCreateDTO = new UserCreateDTO("John Doe", "Zaq12wsx@j", new Email("john.doe@example.com"));
         userResponseDTO = new UserResponseDTO(1L, "John Doe", "john.doe@example.com");
     }
 
@@ -112,7 +112,7 @@ public class UserControllerTest {
 
         mockMvc.perform(put("/api/users/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userResponseDto)))
+                        .content(objectMapper.writeValueAsString(userCreateDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("John Doe Updated"))
                 .andExpect(jsonPath("$.email").value("john.doe.updated@example.com"));

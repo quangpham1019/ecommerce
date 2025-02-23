@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 @Embeddable
 @NoArgsConstructor
 @Getter
-@Setter
 @EqualsAndHashCode
 @ToString
 public class Email {
@@ -26,6 +25,9 @@ public class Email {
     }
 
     private boolean isValidEmail(String address) {
+
+        if (address.trim().isEmpty()) return false;
+
         // Regex pattern can be updated to better suit business requirements
         Pattern emailPattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         Matcher matcher = emailPattern.matcher(address);

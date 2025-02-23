@@ -1,6 +1,7 @@
 package org.ecommerce.user.domain.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.ecommerce.user.domain.model.Email;
 import org.ecommerce.user.domain.model.User;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,8 @@ public class UserDomainService {
      * @param email The email address to check for uniqueness.
      * @throws IllegalArgumentException if the email is already in use.
      */
-    public void validateUniqueEmail(String email) {
-        if (Objects.isNull(email) || email.trim().isEmpty()) throw new IllegalArgumentException("Email cannot be null or empty");
-        if (repository.existsByEmail(email)) {
+    public void validateUniqueEmail(Email email) {
+        if (repository.existsByEmail_Address(email.getAddress())) {
             throw new IllegalArgumentException("Email is already in use");
         }
     }
