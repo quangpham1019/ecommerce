@@ -104,7 +104,7 @@ public class UserApplicationServiceTest {
     @Test
     void registerUser_ShouldRegisterAndReturnUser_WhenEmailIsUnique() {
         // Arrange
-        UserCreateDTO newUserCreateDTO = new UserCreateDTO("jim", "jimPass", new Email("jim@gmail.com"));
+        UserCreateDTO newUserCreateDTO = new UserCreateDTO("jim", "jimPass", "jim@gmail.com");
         User newUser = new User("jim", "jimPass", new Email("jim@gmail.com"));
         UserResponseDTO newUserResponseDTO = new UserResponseDTO(1L, "jim", "jim@gmail.com");
 
@@ -127,7 +127,7 @@ public class UserApplicationServiceTest {
     void registerUser_ShouldThrowException_WhenEmailAlreadyExists() {
         // Arrange
         Email existingEmail = new Email("jim@gmail.com");
-        UserCreateDTO newUserCreateDTO = new UserCreateDTO("jim", "jimPass", existingEmail);
+        UserCreateDTO newUserCreateDTO = new UserCreateDTO("jim", "jimPass", existingEmail.getAddress());
         doThrow(new IllegalArgumentException("Email is already in use"))
                 .when(userDomainService).validateUniqueEmail(existingEmail);
 
@@ -201,7 +201,7 @@ public class UserApplicationServiceTest {
         // Arrange
         Long userId = 1L;
         User existingUser = new User("old", "oldPassword", new Email("old@email.com"));
-        UserCreateDTO userCreateDTO = new UserCreateDTO(null, "newPassword", new Email("new@email.com"));
+        UserCreateDTO userCreateDTO = new UserCreateDTO(null, "newPassword", "new@email.com");
         UserResponseDTO expectedResult = new UserResponseDTO(1L, "old", "new@email.com");
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
         when(userMapper.toResponseDto(existingUser)).thenReturn(expectedResult);

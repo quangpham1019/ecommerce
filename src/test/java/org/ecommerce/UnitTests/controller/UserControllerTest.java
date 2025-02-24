@@ -47,7 +47,7 @@ public class UserControllerTest {
     @BeforeEach
     public void setUp() {
         user = new User("John Doe", "Zaq12wsx@j", new Email("john.doe@example.com"));
-        userCreateDTO = new UserCreateDTO("John Doe", "Zaq12wsx@j", new Email("john.doe@example.com"));
+        userCreateDTO = new UserCreateDTO("John Doe", "Zaq12wsx@j", "john.doe@example.com");
         userResponseDTO = new UserResponseDTO(1L, "John Doe", "john.doe@example.com");
     }
 

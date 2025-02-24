@@ -6,11 +6,16 @@ This project aim to develop a backend service for an ecommerce platform similar 
 
 [Link to my detailed design process in Notion](https://sphenoid-soybean-e9a.notion.site/E-Commerce-Project-15bce826ff1180ebae6ef3ef200f857b)
 
-## **User Context**
+<details>
+    <summary><strong style="font-size: 2em;">User Context</strong></summary>
+
+
 - Designing DTOs for User entity
 - Refactoring controllers, services to use UserDTOs
 - Create domain and app services for Role, Permission
 - Enforce RBAC authorization on endpoints
+
+</details>
 
 ## **Product Context**
 - Develop the business logic for adding, removing, updating products

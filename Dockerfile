@@ -5,8 +5,8 @@ FROM openjdk:17-jdk-slim as build
 WORKDIR /app
 
 # Step 3: Copy files into the container
-COPY ../target/ecommerce-0.0.1-SNAPSHOT.jar ecommerce.jar
-COPY ../src/main/resources config/
+COPY target/ecommerce-0.0.1-SNAPSHOT.jar ecommerce.jar
+COPY src/main/resources config/
 
 # Step 4: Expose the port your application will run on
 EXPOSE 8080

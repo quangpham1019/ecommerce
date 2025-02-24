@@ -1,5 +1,6 @@
 package org.ecommerce.common.exception;
 
+import org.ecommerce.user.domain.exception.InvalidEmailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,6 +18,11 @@ public class GlobalExceptionHandler {
     // Handle IllegalArgumentException (Bad Input)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidEmailException(InvalidEmailException ex) {
         return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
     }
 
