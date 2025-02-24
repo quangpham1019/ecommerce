@@ -59,7 +59,7 @@ public class UserControllerTest {
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].username").value("John Doe"))
-                .andExpect(jsonPath("$[0].email.address").value("john.doe@example.com"));
+                .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
 
         verify(userApplicationService, times(1)).getUsers();
     }
@@ -86,7 +86,7 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userCreateDTO)))
+                        .content(objectMapper.writeValueAsString(new UserCreateDTO("John Doe", "Zaq12wsx@j", "john.doe@example.com"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("John Doe"))
                 .andExpect(jsonPath("$.email").value("john.doe@example.com"));
@@ -130,7 +130,7 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(users)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].username").value("John Doe"))
-                .andExpect(jsonPath("$[0].email.address").value("john.doe@example.com"));
+                .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
 
         verify(userApplicationService, times(1)).registerUsers(anyList());
     }

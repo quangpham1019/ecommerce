@@ -1,5 +1,6 @@
 package org.ecommerce.UnitTests.domain;
 
+import org.ecommerce.user.domain.exception.InvalidEmailException;
 import org.ecommerce.user.domain.model.value_objects.Email;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -25,42 +26,70 @@ public class EmailTest
     }
     @ParameterizedTest
     @NullSource
-    @ValueSource( strings = {"test@.com", "@test.com", "testtest.com", "test.com@gmail", "test@test", "test@test.c"})
-    void constructor_ShouldThrowException_IfEmailIsNull_OrEmailFormatIsNotValid(String invalidAddress) {
+    @ValueSource( strings = {"", "    "})
+    void constructor_ShouldThrowException_IfEmailIsNullOrEmpty(String invalidAddress) {
         // Arrange
 
         // Act
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> new Email(invalidAddress));
+        Exception exception = assertThrows(InvalidEmailException.class, () -> new Email(invalidAddress));
 
         // Assert
-        assertEquals("Invalid email address", exception.getMessage());
+        assertEquals("Email cannot be null or empty", exception.getMessage());
+    }
+    @ParameterizedTest
+    @ValueSource( strings = {"test@.com", "@test.com", "testtest.com", "test.com@gmail", "test@test", "test@test.c"})
+    void constructor_ShouldThrowException_IfEmailFormatIsNotValid(String invalidAddress) {
+        // Arrange
+
+        // Act
+        Exception exception = assertThrows(InvalidEmailException.class, () -> new Email(invalidAddress));
+
+        // Assert
+        assertEquals("Invalid email format", exception.getMessage());
     }
     @ParameterizedTest
     @ValueSource( strings = {"test@test.com", "test@t.co", "t@t.co", "-@t.coom"})
-    void isValidEmail_ShouldReturnTrue_IfEmailFormatIsValid(String validAddress) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void isValidEmail_ShouldDoNothing_IfEmailFormatIsValid(String validAddress) throws NoSuchMethodException {
         // Arrange
         Email email = new Email();
         Method isValidAddress = Email.class.getDeclaredMethod("isValidEmail", String.class);
         isValidAddress.setAccessible(true);
 
         // Act
-        boolean isValid = (boolean) isValidAddress.invoke(email, validAddress);
 
         // Assert
-        assertTrue(isValid);
+        assertDoesNotThrow(() -> isValidAddress.invoke(email, validAddress));
+    }
+    @ParameterizedTest
+    @NullSource
+    @ValueSource( strings = {"", "    "})
+    void isValidEmail_ShouldThrowException_IfEmailIsNullOrEmpty(String InvalidAddress) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        // Arrange
+        Email email = new Email();
+        Method isValidAddress = Email.class.getDeclaredMethod("isValidEmail", String.class);
+        isValidAddress.setAccessible(true);
+
+        // Act
+        InvocationTargetException exception = assertThrows(InvocationTargetException.class, () -> isValidAddress.invoke(email, InvalidAddress));
+
+        // Assert
+        // Extract the cause of the InvocationTargetException
+        assertTrue(exception.getCause() instanceof InvalidEmailException);
+        assertEquals("Email cannot be null or empty", exception.getCause().getMessage());
     }
     @ParameterizedTest
     @ValueSource( strings = {"test@.com", "@test.com", "testtest.com", "test.com@gmail", "test@test", "test@test.c"})
-    void isValidEmail_ShouldReturnFalse_IfEmailFormatIsNotValid(String InvalidAddress) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void isValidEmail_ShouldThrowException_IfEmailFormatIsNotValid(String InvalidAddress) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         // Arrange
         Email email = new Email();
         Method isValidAddress = Email.class.getDeclaredMethod("isValidEmail", String.class);
         isValidAddress.setAccessible(true);
 
         // Act
-        boolean isValid = (boolean) isValidAddress.invoke(email, InvalidAddress);
+        InvocationTargetException exception = assertThrows(InvocationTargetException.class, () -> isValidAddress.invoke(email, InvalidAddress));
 
         // Assert
-        assertFalse(isValid);
+        assertTrue(exception.getCause() instanceof InvalidEmailException);
+        assertEquals("Invalid email format", exception.getCause().getMessage());
     }
 }
