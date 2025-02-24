@@ -1,0 +1,22 @@
+apiVersion: apps/v1    # Specifies the API version for the Deployment resource
+kind: Deployment       # Defines the resource type as a Deployment
+metadata:
+  name: ecommerce-backend-deployment  # Unique identifier of the Deployment in a cluster
+  labels:
+    app: backend            # Labels for grouping and filtering Deployments
+spec:
+  replicas: 1               # Specifies the number of Pods to run
+  selector:
+    matchLabels:
+      app: ecommerce-pod    # the Deployment will only manage Pods with this label
+  template:
+    metadata:
+      labels:
+        app: ecommerce-pod  # Labels applied to Pods created from this template, must match Deployment:spec:selector:matchLabels
+    spec:
+      containers:
+        - name: ecommerce-backend         # Name of the container inside the Pod
+          image: ecommerce-app:latest  # Uses the locally built image named "ecommerce-app:latest"
+          imagePullPolicy: Never       # Prevents Kubernetes from pulling the image from a registry (i.e. use local registry ONLY)
+          ports:
+            - containerPort: 8080      # Exposes port 8080 inside the container

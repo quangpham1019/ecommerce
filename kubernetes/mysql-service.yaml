@@ -1,0 +1,15 @@
+apiVersion: v1  # Specifies that this is a core Kubernetes Service resource.
+kind: Service   # Defines this as a Service, which exposes Pods to other components.
+metadata:
+  name: mysql-container  # The name of the Service, also its DNS name in the cluster.
+
+spec:
+  selector:
+    app: mysql-pod  # Matches Pods with the label "app: mysql" to route traffic to them.
+
+  ports:
+    - protocol: TCP     # The communication protocol (MySQL uses TCP).
+      port: 3306        # The port on which the Service is exposed inside the cluster.
+      targetPort: 3306  # The port on the Pod (MySQL container) that receives traffic.
+
+  type: ClusterIP  # The Service is only accessible within the cluster (default type).

@@ -1,0 +1,28 @@
+apiVersion: apps/v1       # Specifies the API version for Deployment.
+kind: Deployment          # Defines this as a Deployment resource, which manages ReplicaSets and Pods.
+metadata:
+  name: mysql-deployment  # The name of the Deployment.
+
+spec:
+  replicas: 1           # Number of Pod replicas to run (1 instance of MySQL).
+
+  selector:
+    matchLabels:
+      app: mysql-pod    # Ensures the Deployment manages only Pods with this label.
+
+  template:
+    metadata:
+      labels:
+        app: mysql-pod  # Labels applied to the Pods created by this Deployment.
+
+    spec:
+      containers:
+        - name: mysql-container  # Name of the container within the Pod.
+          image: mysql:5.7       # MySQL 5.7 official Docker image.
+
+          env:
+            - name: MYSQL_ROOT_PASSWORD  # Environment variable for MySQL root password.
+              value: "kccvmck2"          # The actual password (consider using Secrets for security).
+
+          ports:
+            - containerPort: 3306   # The MySQL container exposes port 3306 for database connections.

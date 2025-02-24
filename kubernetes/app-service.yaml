@@ -1,0 +1,15 @@
+apiVersion: v1    # Specifies that this is a Kubernetes Service resource.
+kind: Service     # Defines this as a Service, which enables network access to a set of Pods.
+metadata:
+  name: ecommerce-backend-service  # The unique name of the Service within the cluster.
+
+spec:
+  selector:
+    app: ecommerce-pod  # Matches Pods with the label 'app: your-app' to route traffic to them.
+
+  ports:
+    - protocol: TCP     # The communication protocol (typically TCP for most applications).
+      port: 8080        # The port on which the Service is exposed inside the cluster.
+      targetPort: 8080  # The port on the Pods where the application is actually running.
+
+  type: ClusterIP       # Default Service type. Makes the Service accessible only within the cluster.
