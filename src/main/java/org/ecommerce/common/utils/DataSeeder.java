@@ -297,78 +297,78 @@ public class DataSeeder implements CommandLineRunner {
             // Hardcoded user-address associations with random data for shipping/billing
             userAddressRepository.saveAll(Arrays.asList(
                     // User 1 addresses
-                    new UserAddress(users.get(0), "John Doe", addresses.get(0), "123-456-7890", true, true), // Both shipping and billing
+                    new UserAddress(users.get(0), "John Doe", addresses.get(0), "123-456-7890", true),
 
                     // User 2 addresses
-                    new UserAddress(users.get(1), "Alice Smith", addresses.get(1), "234-567-8901", true, false), // Shipping
-                    new UserAddress(users.get(1), "Bob Smith", addresses.get(2), "432-765-5432", false, true), // Billing
+                    new UserAddress(users.get(1), "Alice Smith", addresses.get(1), "234-567-8901", true),
+                    new UserAddress(users.get(1), "Bob Smith", addresses.get(2), "432-765-5432", false),
 
                     // User 3 addresses
-                    new UserAddress(users.get(2), "Chris Johnson", addresses.get(3), "345-678-9012", true, false), // Shipping
-                    new UserAddress(users.get(2), "Dana Johnson", addresses.get(4), "543-876-6543", false, true), // Billing
+                    new UserAddress(users.get(2), "Chris Johnson", addresses.get(3), "345-678-9012", true),
+                    new UserAddress(users.get(2), "Dana Johnson", addresses.get(4), "543-876-6543", false),
 
                     // User 4 addresses
-                    new UserAddress(users.get(3), "Eve Brown", addresses.get(5), "456-789-0123", true, false), // Shipping
-                    new UserAddress(users.get(3), "Frank Brown", addresses.get(6), "654-987-7654", false, true), // Billing
+                    new UserAddress(users.get(3), "Eve Brown", addresses.get(5), "456-789-0123", true),
+                    new UserAddress(users.get(3), "Frank Brown", addresses.get(6), "654-987-7654", false),
 
                     // User 5 addresses
-                    new UserAddress(users.get(4), "Grace Davis", addresses.get(7), "567-890-1234", true, false), // Shipping
-                    new UserAddress(users.get(4), "Harry Davis", addresses.get(8), "765-098-8765", false, true), // Billing
+                    new UserAddress(users.get(4), "Grace Davis", addresses.get(7), "567-890-1234", true),
+                    new UserAddress(users.get(4), "Harry Davis", addresses.get(8), "765-098-8765", false),
 
                     // User 6 addresses
-                    new UserAddress(users.get(5), "Ivy Evans", addresses.get(9), "678-901-2345", true, true), // Both shipping and billing
+                    new UserAddress(users.get(5), "Ivy Evans", addresses.get(9), "678-901-2345", true),
 
                     // User 7 addresses
-                    new UserAddress(users.get(6), "Liam Wilson", addresses.get(0), "789-012-3456", true, false), // Shipping
-                    new UserAddress(users.get(6), "Mona Wilson", addresses.get(1), "987-123-6543", false, true), // Billing
+                    new UserAddress(users.get(6), "Liam Wilson", addresses.get(0), "789-012-3456", true),
+                    new UserAddress(users.get(6), "Mona Wilson", addresses.get(1), "987-123-6543", false),
 
                     // User 8 addresses
-                    new UserAddress(users.get(7), "Noah Harris", addresses.get(2), "890-123-4567", true, false), // Shipping
-                    new UserAddress(users.get(7), "Olivia Harris", addresses.get(3), "098-234-7654", false, true), // Billing
+                    new UserAddress(users.get(7), "Noah Harris", addresses.get(2), "890-123-4567", true),
+                    new UserAddress(users.get(7), "Olivia Harris", addresses.get(3), "098-234-7654", false),
 
                     // User 9 addresses
-                    new UserAddress(users.get(8), "Paul Clark", addresses.get(4), "901-234-5678", true, false), // Shipping
-                    new UserAddress(users.get(8), "Quincy Clark", addresses.get(5), "109-345-8765", false, true), // Billing
+                    new UserAddress(users.get(8), "Paul Clark", addresses.get(4), "901-234-5678", true),
+                    new UserAddress(users.get(8), "Quincy Clark", addresses.get(5), "109-345-8765", false),
 
                     // User 10 addresses
-                    new UserAddress(users.get(9), "Rita Lewis", addresses.get(6), "012-345-6789", true, true), // Both shipping and billing
+                    new UserAddress(users.get(9), "Rita Lewis", addresses.get(6), "012-345-6789", true),
 
                     // User 11 addresses
-                    new UserAddress(users.get(10), "Tina Young", addresses.get(7), "123-321-4567", true, false), // Shipping
-                    new UserAddress(users.get(10), "Ursula Young", addresses.get(8), "321-654-8765", false, true), // Billing
+                    new UserAddress(users.get(10), "Tina Young", addresses.get(7), "123-321-4567", true),
+                    new UserAddress(users.get(10), "Ursula Young", addresses.get(8), "321-654-8765", false),
 
                     // User 12 addresses
-                    new UserAddress(users.get(11), "Victor White", addresses.get(9), "234-543-7654", true, true), // Both shipping and billing
+                    new UserAddress(users.get(11), "Victor White", addresses.get(9), "234-543-7654", true),
 
                     // User 13 addresses
-                    new UserAddress(users.get(12), "Xander Adams", addresses.get(0), "345-654-8765", true, false), // Shipping
-                    new UserAddress(users.get(12), "Yara Adams", addresses.get(1), "543-765-2109", false, true), // Billing
+                    new UserAddress(users.get(12), "Xander Adams", addresses.get(0), "345-654-8765", true),
+                    new UserAddress(users.get(12), "Yara Adams", addresses.get(1), "543-765-2109", false),
 
                     // User 14 addresses
-                    new UserAddress(users.get(13), "Zara Scott", addresses.get(2), "456-765-4321", true, false), // Shipping
-                    new UserAddress(users.get(13), "Aaron Scott", addresses.get(3), "654-987-3456", false, true), // Billing
+                    new UserAddress(users.get(13), "Zara Scott", addresses.get(2), "456-765-4321", true),
+                    new UserAddress(users.get(13), "Aaron Scott", addresses.get(3), "654-987-3456", false),
 
                     // User 15 addresses
-                    new UserAddress(users.get(14), "Bella Moore", addresses.get(4), "567-876-5432", true, false), // Shipping
-                    new UserAddress(users.get(14), "Carlos Moore", addresses.get(5), "765-321-0987", false, true), // Billing
+                    new UserAddress(users.get(14), "Bella Moore", addresses.get(4), "567-876-5432", true),
+                    new UserAddress(users.get(14), "Carlos Moore", addresses.get(5), "765-321-0987", false),
 
                     // User 16 addresses
-                    new UserAddress(users.get(15), "Dylan Martinez", addresses.get(6), "678-987-6543", true, true), // Both shipping and billing
+                    new UserAddress(users.get(15), "Dylan Martinez", addresses.get(6), "678-987-6543", true),
 
                     // User 17 addresses
-                    new UserAddress(users.get(16), "Felix Perez", addresses.get(7), "789-321-7654", true, false), // Shipping
-                    new UserAddress(users.get(16), "Gina Perez", addresses.get(8), "987-234-5678", false, true), // Billing
+                    new UserAddress(users.get(16), "Felix Perez", addresses.get(7), "789-321-7654", true),
+                    new UserAddress(users.get(16), "Gina Perez", addresses.get(8), "987-234-5678", false),
 
                     // User 18 addresses
-                    new UserAddress(users.get(17), "Holly Ramirez", addresses.get(9), "890-432-1098", true, true), // Both shipping and billing
+                    new UserAddress(users.get(17), "Holly Ramirez", addresses.get(9), "890-432-1098", true),
 
                     // User 19 addresses
-                    new UserAddress(users.get(18), "Jackie Lee", addresses.get(0), "901-543-7654", true, false), // Shipping
-                    new UserAddress(users.get(18), "Kylie Lee", addresses.get(1), "109-654-8765", false, true), // Billing
+                    new UserAddress(users.get(18), "Jackie Lee", addresses.get(0), "901-543-7654", true),
+                    new UserAddress(users.get(18), "Kylie Lee", addresses.get(1), "109-654-8765", false),
 
                     // User 20 addresses
-                    new UserAddress(users.get(19), "Lena Walker", addresses.get(2), "012-654-9876", true, false), // Shipping
-                    new UserAddress(users.get(19), "Mason Walker", addresses.get(3), "210-765-4321", false, true) // Billing
+                    new UserAddress(users.get(19), "Lena Walker", addresses.get(2), "012-654-9876", true),
+                    new UserAddress(users.get(19), "Mason Walker", addresses.get(3), "210-765-4321", false)
             ));
         }
     }

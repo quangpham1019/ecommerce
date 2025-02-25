@@ -32,14 +32,12 @@ public class UserAddress {
 
     private String phoneNumber;
     private boolean isDefaultShipping;
-    private boolean isDefaultBilling;
 
-    public UserAddress(User user, String recipientName, Address address, String phoneNumber, boolean isDefaultShipping, boolean isDefaultBilling) {
+    public UserAddress(User user, String recipientName, Address address, String phoneNumber, boolean isDefaultShipping) {
         this.user = user;
         this.recipientName = recipientName;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.isDefaultShipping = isDefaultShipping;
-        this.isDefaultBilling = isDefaultBilling;
     }
 }

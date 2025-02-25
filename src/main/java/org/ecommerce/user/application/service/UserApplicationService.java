@@ -5,6 +5,7 @@ import org.ecommerce.user.application.dto.UserAddressResponseDTO;
 import org.ecommerce.user.application.dto.UserCreateDTO;
 import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.application.mapper.interfaces.UserAddressMapper;
 import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.domain.model.*;
 import org.ecommerce.user.domain.model.enums.UserRoleStatus;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.ecommerce.common.utils.ObjectUtils.convertToMap;
 
@@ -31,17 +33,19 @@ public class UserApplicationService {
     private final UserRoleRepository userRoleRepository;
     private final UserDomainService userDomainService;
     private final UserMapper userMapper;
+    private final UserAddressMapper userAddressMapper;
 
     public UserApplicationService(UserRepository userRepository,
                                   RoleRepository roleRepository,
                                   UserRoleRepository userRoleRepository,
                                   UserDomainService userDomainService,
-                                  UserMapper userMapper) {
+                                  UserMapper userMapper, UserAddressMapper userAddressMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.userDomainService = userDomainService;
         this.userMapper = userMapper;
+        this.userAddressMapper = userAddressMapper;
     }
 
     /**
@@ -217,6 +221,13 @@ public class UserApplicationService {
 
     @Transactional
     public List<UserAddressResponseDTO> getUserAddressesByUserId(Long userId) {
-        return null;
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+
+        return user.getUserAddressSet()
+                .stream()
+                .map(userAddressMapper::toUserAddressResponseDTO)
+                .collect(Collectors.toList());
     }
 }
