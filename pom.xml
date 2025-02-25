@@ -111,6 +111,10 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+                            <excludes>
+                                <exclude>org/ecommerce/common/utils/DataSeeder*</exclude>
+                                <!-- Or any other pattern matching your seeder class paths -->
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>

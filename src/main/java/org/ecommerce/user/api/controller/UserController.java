@@ -9,23 +9,37 @@ import org.ecommerce.user.application.dto.UserCreateDTO;
 import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
 import org.ecommerce.user.application.service.UserApplicationService;
+import org.ecommerce.user.domain.model.Address;
 import org.ecommerce.user.domain.model.User;
+import org.ecommerce.user.domain.model.UserAddress;
+import org.ecommerce.user.infrastructure.repository.jpa.AddressRepository;
+import org.ecommerce.user.infrastructure.repository.jpa.UserAddressRepository;
+import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserApplicationService userApplicationService;
+    private final AddressRepository addressRepository;
+    private final UserAddressRepository userAddressRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserApplicationService userApplicationService) {
+    public UserController(UserApplicationService userApplicationService, AddressRepository addressRepository, UserAddressRepository userAddressRepository, UserRepository userRepository) {
         this.userApplicationService = userApplicationService;
+        this.addressRepository = addressRepository;
+        this.userAddressRepository = userAddressRepository;
+        this.userRepository = userRepository;
     }
 
     //region DEV-ONLY methods
@@ -72,5 +86,11 @@ public class UserController {
         return ResponseEntity.ok(userApplicationService.updatePartial(id, userCreateDTO));
     }
 
+    @GetMapping("/{id}/addresses")
+    public ResponseEntity<Set<Address>> getUserAddresses(@PathVariable Long id) {
+        Set<UserAddress> userAddresses = userRepository.findById(id).orElse(null).getUserAddressSet();
+        Set<Address> addresses = userAddresses.stream().map(ua -> ua.getAddress()).collect(Collectors.toSet());
+        return ResponseEntity.ok(addresses);
+    }
 
 }

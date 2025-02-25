@@ -33,11 +33,12 @@ public class UserProfile {
 
     private boolean isActive;
 
-    public UserProfile(String firstName, String lastName, Date dateOfBirth, String gender, User user) {
+    public UserProfile(String firstName, String lastName, Date dateOfBirth, String gender, User user, boolean isActive) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.user = user;
+        this.isActive = isActive;
     }
 }

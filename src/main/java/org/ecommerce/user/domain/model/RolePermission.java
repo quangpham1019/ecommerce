@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.ecommerce.user.domain.model.enums.RolePermissionStatus;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 
@@ -33,6 +34,15 @@ public class RolePermission {
     @CreationTimestamp
     private Timestamp assignedAt;
 
+    @UpdateTimestamp
+    private Timestamp updatedAt;
+
     @Enumerated(EnumType.STRING)
     private RolePermissionStatus status;
+
+    public RolePermission(Permission permission, Role role, RolePermissionStatus rolePermissionStatus) {
+        this.permission = permission;
+        this.role = role;
+        this.status = rolePermissionStatus;
+    }
 }
