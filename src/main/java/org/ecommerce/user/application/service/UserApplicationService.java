@@ -1,6 +1,7 @@
 package org.ecommerce.user.application.service;
 
 import jakarta.transaction.Transactional;
+import org.ecommerce.user.application.dto.UserAddressResponseDTO;
 import org.ecommerce.user.application.dto.UserCreateDTO;
 import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
@@ -212,5 +213,10 @@ public class UserApplicationService {
             throw new IllegalArgumentException("User not found");
         }
         return userRoleRepository.findByUser_Id(userId);
+    }
+
+    @Transactional
+    public List<UserAddressResponseDTO> getUserAddressesByUserId(Long userId) {
+        return null;
     }
 }

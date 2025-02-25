@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import org.ecommerce.user.application.dto.UserAddressResponseDTO;
 import org.ecommerce.user.application.dto.UserCreateDTO;
 import org.ecommerce.user.application.dto.UserProfileDTO;
 import org.ecommerce.user.application.dto.UserResponseDTO;
@@ -29,18 +30,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserApplicationService userApplicationService;
-    private final AddressRepository addressRepository;
-    private final UserAddressRepository userAddressRepository;
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserController(UserApplicationService userApplicationService, AddressRepository addressRepository, UserAddressRepository userAddressRepository, UserRepository userRepository) {
+    public UserController(UserApplicationService userApplicationService) {
         this.userApplicationService = userApplicationService;
-        this.addressRepository = addressRepository;
-        this.userAddressRepository = userAddressRepository;
-        this.userRepository = userRepository;
     }
+
+    private final UserApplicationService userApplicationService;
 
     //region DEV-ONLY methods
     @Operation(
@@ -87,10 +82,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}/addresses")
-    public ResponseEntity<Set<Address>> getUserAddresses(@PathVariable Long id) {
-        Set<UserAddress> userAddresses = userRepository.findById(id).orElse(null).getUserAddressSet();
-        Set<Address> addresses = userAddresses.stream().map(ua -> ua.getAddress()).collect(Collectors.toSet());
-        return ResponseEntity.ok(addresses);
+    public ResponseEntity<List<UserAddressResponseDTO>> getUserAddressesByUserId(@PathVariable Long id) {
+
+        return ResponseEntity.ok(userApplicationService.getUserAddressesByUserId(id));
     }
 
 }
