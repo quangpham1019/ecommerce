@@ -7,23 +7,25 @@ import lombok.*;
 import java.util.Set;
 
 @Entity
-
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
+@ToString(onlyExplicitlyIncluded = true)
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     @EqualsAndHashCode.Include
+    @ToString.Include
     private Long id;
 
     @EqualsAndHashCode.Include
+    @ToString.Include
     private String roleName;
 
+    @ToString.Include
     private String roleDescription;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)

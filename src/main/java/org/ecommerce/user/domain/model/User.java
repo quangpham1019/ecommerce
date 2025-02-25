@@ -43,6 +43,14 @@ public class User {
     @JsonIgnore
     private Set<UserRole> userRoles;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<UserProfile> userProfiles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<UserAddress> userAddressSet;
+
     public User(String username, String password, Email email) {
         this.username = username;
         this.password = password;

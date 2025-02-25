@@ -39,9 +39,14 @@ for java_file in "$input_directory"/*.java; do
     if [ -n "$class_name" ] && [ -n "$id_type" ]; then
       # Generate the repository class name by appending "Repository"
       repository_class="${class_name}Repository"
+      repository_file_path="${output_directory}/${repository_class}.java"
 
-      # Create the repository class content
-      repository_content="package org.ecommerce.$CONTEXT_NAME.domain.repository;
+      # Check if the repository file already exists
+      if [ -f "$repository_file_path" ]; then
+        echo "Repository interface '${repository_class}' already exists. Skipping creation."
+      else
+              # Create the repository class content
+              repository_content="package org.ecommerce.$CONTEXT_NAME.infrastructure.repository.jpa;
 
 import org.ecommerce.$CONTEXT_NAME.domain.model.${class_name};
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -50,10 +55,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ${repository_class} extends JpaRepository<${class_name}, ${id_type}> {}"
 
-      # Output the content to a file in the output directory
-      echo -e "$repository_content" > "${output_directory}/${class_name}Repository.java"
+              # Output the content to a file in the output directory
+              echo -e "$repository_content" > "${repository_file_path}"
 
-      echo "Repository interface '${output_directory}/${class_name}Repository.java' has been created."
+              echo "Repository interface '${output_directory}/${repository_class}.java' has been created."
+      fi
     else
       echo "Class name or ID field not found in file: $java_file"
     fi

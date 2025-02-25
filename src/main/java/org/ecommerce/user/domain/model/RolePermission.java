@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Timestamp;
 
 @Entity
-
 @Getter
 @Setter
 @NoArgsConstructor
