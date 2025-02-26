@@ -5,26 +5,19 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import org.ecommerce.user.application.dto.UserAddressResponseDTO;
-import org.ecommerce.user.application.dto.UserCreateDTO;
-import org.ecommerce.user.application.dto.UserProfileDTO;
-import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.application.dto.userAddressDTO.UserAddressCreateDTO;
+import org.ecommerce.user.application.dto.userAddressDTO.UserAddressResponseDTO;
+import org.ecommerce.user.application.dto.userDTO.UserCreateDTO;
+import org.ecommerce.user.application.dto.userDTO.UserProfileDTO;
+import org.ecommerce.user.application.dto.userDTO.UserResponseDTO;
 import org.ecommerce.user.application.service.UserApplicationService;
-import org.ecommerce.user.domain.model.Address;
 import org.ecommerce.user.domain.model.User;
 import org.ecommerce.user.domain.model.UserAddress;
-import org.ecommerce.user.infrastructure.repository.jpa.AddressRepository;
-import org.ecommerce.user.infrastructure.repository.jpa.UserAddressRepository;
-import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -87,4 +80,15 @@ public class UserController {
         return ResponseEntity.ok(userApplicationService.getUserAddressesByUserId(id));
     }
 
+//    @PostMapping("/{userId}/addresses/{addressId}")
+//    public ResponseEntity<UserAddress> setDefaultShippingAddress(@PathVariable Long userId, @PathVariable Long addressId) {
+//        return ResponseEntity.ok(userApplicationService.setDefaultShippingAddress(userId, addressId));
+//    }
+
+    @PostMapping("/{userId}/addresses")
+    public ResponseEntity<UserAddressResponseDTO> addAddressToUserAccount(
+            @PathVariable Long userId,
+            @RequestBody UserAddressCreateDTO userAddressCreateDTO) {
+        return ResponseEntity.ok(userApplicationService.addAddressToUserAccount(userId, userAddressCreateDTO));
+    }
 }

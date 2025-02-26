@@ -2,6 +2,7 @@ package org.ecommerce.UnitTests.domain;
 
 import org.ecommerce.user.domain.model.Role;
 import org.ecommerce.user.domain.model.User;
+import org.ecommerce.user.domain.model.UserAddress;
 import org.ecommerce.user.domain.model.UserRole;
 import org.ecommerce.user.domain.model.enums.UserRoleStatus;
 import org.junit.jupiter.api.Test;
@@ -118,5 +119,59 @@ public class UserTest {
         assertEquals(1, actualResultSet.size());
         assertEquals(expectedResultSet.iterator().next(), actualResultSet.iterator().next());
         assertFalse(expectedResultSet == actualResultSet);
+    }
+
+
+    @Test
+    public void addAddress_ShouldAddNewAddress_WhenUserDoesNotHaveAddress() {
+        // Arrange
+        User user = new User();
+        UserAddress userAddress = new UserAddress(user, "john", null, null, false);
+        user.setUserAddressSet(new HashSet<>());
+
+        // Act
+        user.addAddress(userAddress);
+
+        // Assert
+        assertEquals(1, user.getUserAddressSet().size());
+        assertTrue(user.getUserAddressSet().contains(userAddress));
+    }
+
+    @Test
+    public void addAddress_ShouldUpdateDefaultAddressToNewAddress_WhenUserDoesNotHaveAddress_AndIsDefaultShippingIsTrue() {
+        // Arrange
+        User user = new User();
+        UserAddress oldAddress = new UserAddress(user, "john", null, null, true);
+        UserAddress userAddress = new UserAddress(user, "jim", null, null, true);
+
+        Set<UserAddress> addressSet = new HashSet<>();
+        addressSet.add(oldAddress);
+        user.setUserAddressSet(addressSet);
+
+        // Act
+        user.addAddress(userAddress);
+
+        // Assert
+        assertFalse(oldAddress.isDefaultShipping());
+        assertTrue(userAddress.isDefaultShipping());
+        assertEquals(2, user.getUserAddressSet().size());
+    }
+
+    @Test
+    public void addAddress_ShouldThrowException_WhenUserAlreadyHasAddress() {
+        // Arrange
+        User user = new User();
+        UserAddress userAddress = new UserAddress(user, "john", null, null, true);
+        Set<UserAddress> addressSet = new HashSet<>();
+        addressSet.add(userAddress);
+        user.setUserAddressSet(addressSet);
+
+        // Act
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            user.addAddress(userAddress);
+        });
+
+        // Assert
+        assertEquals("Address already exists", exception.getMessage());
     }
 }

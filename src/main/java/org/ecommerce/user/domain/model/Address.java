@@ -25,12 +25,6 @@ public class Address {
     private String zip;
     private String country;
 
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Set<UserAddress> userAddresses;
-
     public Address(String street, String city, String state, String zip, String country) {
         this.street = street;
         this.city = city;

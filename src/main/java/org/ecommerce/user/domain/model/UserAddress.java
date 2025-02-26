@@ -2,6 +2,7 @@ package org.ecommerce.user.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.ecommerce.user.domain.model.value_objects.UserStoredAddress;
 
 @Entity
 @Table
@@ -15,7 +16,7 @@ public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    @EqualsAndHashCode.Include
+//    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne
@@ -23,17 +24,17 @@ public class UserAddress {
     @EqualsAndHashCode.Include
     private User user;
 
+    @EqualsAndHashCode.Include
     private String recipientName;
 
-    @ManyToOne
-    @JoinColumn(name = "address")
+    @Embedded
     @EqualsAndHashCode.Include
-    private Address address;
+    private UserStoredAddress address;
 
     private String phoneNumber;
     private boolean isDefaultShipping;
 
-    public UserAddress(User user, String recipientName, Address address, String phoneNumber, boolean isDefaultShipping) {
+    public UserAddress(User user, String recipientName, UserStoredAddress address, String phoneNumber, boolean isDefaultShipping) {
         this.user = user;
         this.recipientName = recipientName;
         this.address = address;

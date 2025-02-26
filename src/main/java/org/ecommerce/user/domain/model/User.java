@@ -8,6 +8,8 @@ import org.ecommerce.user.domain.model.value_objects.Email;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,5 +79,36 @@ public class User {
 
     public Set<UserRole> getUserRoles() {
         return userRoles.stream().filter(ur -> ur.getStatus() == UserRoleStatus.ACTIVE).collect(Collectors.toSet());
+    }
+
+//    public void updateDefaultShipping(Long userAddressId) {
+//        userAddressSet
+//                .stream()
+//                .forEach(userAddress -> {
+//                    userAddress.setDefaultShipping(Objects.equals(userAddress.getId(), userAddressId));
+//                });
+//    }
+
+
+    public void addAddress(UserAddress userAddress) {
+
+        // if new address is default
+            // flush other addresses isDefaultShipping to false
+        // add new address to set
+            // if duplicate, throw error
+        userAddress.setUser(this);
+
+        if (userAddress.isDefaultShipping()) {
+            resetDefaultShipping();
+        }
+
+        if(!getUserAddressSet().add(userAddress))
+            throw new IllegalArgumentException("Address already exists");
+
+    }
+
+    private void resetDefaultShipping() {
+        getUserAddressSet().
+                forEach(address -> address.setDefaultShipping(false));
     }
 }

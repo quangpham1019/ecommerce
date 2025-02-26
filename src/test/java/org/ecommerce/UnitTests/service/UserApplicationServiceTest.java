@@ -1,13 +1,17 @@
 package org.ecommerce.UnitTests.service;
 
-import org.ecommerce.user.application.dto.UserCreateDTO;
-import org.ecommerce.user.application.dto.UserProfileDTO;
-import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.application.dto.userAddressDTO.UserAddressCreateDTO;
+import org.ecommerce.user.application.dto.userAddressDTO.UserAddressResponseDTO;
+import org.ecommerce.user.application.dto.userDTO.UserCreateDTO;
+import org.ecommerce.user.application.dto.userDTO.UserProfileDTO;
+import org.ecommerce.user.application.dto.userDTO.UserResponseDTO;
+import org.ecommerce.user.application.mapper.interfaces.UserAddressMapper;
 import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.application.service.UserApplicationService;
 import org.ecommerce.user.domain.model.*;
 import org.ecommerce.user.domain.model.enums.UserRoleStatus;
 import org.ecommerce.user.domain.model.value_objects.Email;
+import org.ecommerce.user.domain.model.value_objects.UserStoredAddress;
 import org.ecommerce.user.domain.service.UserDomainService;
 import org.ecommerce.user.infrastructure.repository.jpa.RoleRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
@@ -21,6 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +45,8 @@ public class UserApplicationServiceTest {
     private UserDomainService userDomainService;
     @Mock
     private UserMapper userMapper;
+    @Mock
+    private UserAddressMapper userAddressMapper;
 
     @InjectMocks
     private UserApplicationService userApplicationService;
@@ -391,5 +398,68 @@ public class UserApplicationServiceTest {
         assertEquals("User not found", exception.getMessage());
         verify(userRepository).existsById(userId);
         verify(userRoleRepository, never()).findByUser_Id(userId);
+    }
+
+    @Test
+    void addAddressToUserAccount_ShouldReturnAddedAddress_WhenUserIsFound_AndUserDoesNotHaveAddress() {
+        // Arrange
+        User user = new User();
+        UserStoredAddress userStoredAddress = new UserStoredAddress("123 Main St", "city", "state", "zip", "country");
+        UserAddressCreateDTO addressCreateDTO = new UserAddressCreateDTO("john", userStoredAddress, null, false);
+        UserAddress userAddress = new UserAddress(user, "john", userStoredAddress, null, false);
+        UserAddressResponseDTO addressResponseDTO = new UserAddressResponseDTO("john", userStoredAddress, null, false);
+        user.setUserAddressSet(new HashSet<>());
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userAddressMapper.toUserAddress(addressCreateDTO)).thenReturn(userAddress);
+        when(userAddressMapper.toUserAddressResponseDTO(userAddress)).thenReturn(addressResponseDTO);
+
+        // Act
+        UserAddressResponseDTO result = userApplicationService.addAddressToUserAccount(1L, addressCreateDTO);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(userStoredAddress, result.getAddress());
+        verify(userRepository).findById(1L);
+        verify(userAddressMapper).toUserAddress(addressCreateDTO);
+        verify(userAddressMapper).toUserAddressResponseDTO(userAddress);
+    }
+
+    @Test
+    void addAddressToUserAccount_ShouldThrowException_WhenUserIsFound_AndUserAlreadyHasAddress() {
+        // Arrange
+        User user = new User();
+        UserAddressCreateDTO addressCreateDTO = new UserAddressCreateDTO();
+        UserAddress userAddress = new UserAddress();
+        user.setUserAddressSet(new HashSet<>());
+
+        user.addAddress(userAddress);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userAddressMapper.toUserAddress(addressCreateDTO)).thenReturn(userAddress);
+
+        // Act
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userApplicationService.addAddressToUserAccount(1L, addressCreateDTO);
+        });
+
+        // Assert
+        assertEquals("Address already exists", exception.getMessage());
+    }
+
+    @Test
+    void addAddressToUserAccount_ShouldThrowException_WhenUserIsNotFound() {
+        // Arrange
+        UserAddressCreateDTO addressCreateDTO = new UserAddressCreateDTO();
+
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // Act
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userApplicationService.addAddressToUserAccount(1L, addressCreateDTO);
+        });
+
+        // Assert
+        assertEquals("User not found", exception.getMessage());
     }
 }

@@ -1,10 +1,11 @@
 package org.ecommerce.user.application.service;
 
 import jakarta.transaction.Transactional;
-import org.ecommerce.user.application.dto.UserAddressResponseDTO;
-import org.ecommerce.user.application.dto.UserCreateDTO;
-import org.ecommerce.user.application.dto.UserProfileDTO;
-import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.application.dto.userAddressDTO.UserAddressCreateDTO;
+import org.ecommerce.user.application.dto.userAddressDTO.UserAddressResponseDTO;
+import org.ecommerce.user.application.dto.userDTO.UserCreateDTO;
+import org.ecommerce.user.application.dto.userDTO.UserProfileDTO;
+import org.ecommerce.user.application.dto.userDTO.UserResponseDTO;
 import org.ecommerce.user.application.mapper.interfaces.UserAddressMapper;
 import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.domain.model.*;
@@ -229,5 +230,34 @@ public class UserApplicationService {
                 .stream()
                 .map(userAddressMapper::toUserAddressResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+//    public UserAddress setDefaultShippingAddress(Long userId, Long addressId) {
+//        return null;
+//    }
+
+    @Transactional
+    public UserAddressResponseDTO addAddressToUserAccount(Long userId, UserAddressCreateDTO userAddressCreateDTO) {
+
+        // check if user exists, if not throw error
+        // map UserAddressCreateDTO to UserAddress
+
+        // if new address is default
+            // flush other addresses isDefaultShipping to false
+        // add new address to set
+            // if duplicate, throw error
+
+        // map the new UserAddress to UserAddressResponseDTO
+        // return userAddressResponseDTO
+
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+
+        UserAddress userAddressToAdd = userAddressMapper.toUserAddress(userAddressCreateDTO);
+
+        user.addAddress(userAddressToAdd);
+
+        return userAddressMapper.toUserAddressResponseDTO(userAddressToAdd);
     }
 }

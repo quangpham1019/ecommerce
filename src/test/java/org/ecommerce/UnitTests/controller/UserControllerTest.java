@@ -3,17 +3,21 @@ package org.ecommerce.UnitTests.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ecommerce.Config.TestSecurityConfig;
 import org.ecommerce.user.api.controller.UserController;
-import org.ecommerce.user.application.dto.UserCreateDTO;
-import org.ecommerce.user.application.dto.UserProfileDTO;
-import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.application.dto.userAddressDTO.UserAddressCreateDTO;
+import org.ecommerce.user.application.dto.userAddressDTO.UserAddressResponseDTO;
+import org.ecommerce.user.application.dto.userDTO.UserCreateDTO;
+import org.ecommerce.user.application.dto.userDTO.UserProfileDTO;
+import org.ecommerce.user.application.dto.userDTO.UserResponseDTO;
 import org.ecommerce.user.application.service.UserApplicationService;
 import org.ecommerce.user.domain.model.value_objects.Email;
 import org.ecommerce.user.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
@@ -23,6 +27,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -43,6 +49,7 @@ public class UserControllerTest {
     private User user;
     private UserCreateDTO userCreateDTO;
     private UserResponseDTO userResponseDTO;
+
 
     @BeforeEach
     public void setUp() {
@@ -133,5 +140,45 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
 
         verify(userApplicationService, times(1)).registerUsers(anyList());
+    }
+
+    @Test
+    void getUserAddressesByUserId_ShouldReturnAddresses_WhenUserExists() throws Exception {
+        Long userId = 1L;
+        String phoneNumber = "123456789";
+        String recipientName = "John Doe";
+        UserAddressResponseDTO userAddressResponseDTO = new UserAddressResponseDTO(recipientName, null, phoneNumber, false);
+        List<UserAddressResponseDTO> addresses = List.of(userAddressResponseDTO);
+        when(userApplicationService.getUserAddressesByUserId(userId)).thenReturn(addresses);
+
+        mockMvc.perform(get("/api/users/{id}/addresses", userId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].recipientName").value("John Doe"))
+                .andExpect(jsonPath("$[0].phoneNumber").value(phoneNumber));
+
+        verify(userApplicationService, times(1)).getUserAddressesByUserId(userId);
+    }
+
+    @Test
+    void addAddressToUserAccount_ShouldReturnAddedAddress_WhenUserIsFound() throws Exception {
+        Long userId = 1L;
+        UserAddressCreateDTO userAddressCreateDTO = new UserAddressCreateDTO("john", null, null, false);
+        UserAddressResponseDTO userAddressResponseDTO = new UserAddressResponseDTO("john", null, null, false);
+        when(userApplicationService
+                .addAddressToUserAccount(
+                    eq(1L),
+                    argThat(dto ->
+                        dto.getRecipientName().equals("john")
+                    && !dto.isDefaultShipping())
+                    ))
+                .thenReturn(userAddressResponseDTO);
+
+        mockMvc.perform(post("/api/users/{userId}/addresses", userId)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(userAddressCreateDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.recipientName").value("john"));
+
+        verify(userApplicationService, times(1)).addAddressToUserAccount(anyLong(), any(UserAddressCreateDTO.class));
     }
 }

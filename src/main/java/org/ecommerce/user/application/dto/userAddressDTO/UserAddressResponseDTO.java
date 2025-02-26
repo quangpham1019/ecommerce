@@ -1,10 +1,10 @@
-package org.ecommerce.user.application.dto;
+package org.ecommerce.user.application.dto.userAddressDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ecommerce.user.domain.model.Address;
+import org.ecommerce.user.domain.model.value_objects.UserStoredAddress;
 
 @Getter
 @Setter
@@ -13,11 +13,7 @@ import org.ecommerce.user.domain.model.Address;
 public class UserAddressResponseDTO {
 
     private String recipientName;
-    private String street;
-    private String city;
-    private String state;
-    private String zip;
-    private String country;
+    private UserStoredAddress address;
     private String phoneNumber;
     private boolean isDefaultShipping;
 
