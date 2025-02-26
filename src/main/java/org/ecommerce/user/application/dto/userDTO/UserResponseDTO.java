@@ -1,8 +1,6 @@
-package org.ecommerce.user.application.dto;
+package org.ecommerce.user.application.dto.userDTO;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.stereotype.Service;
 
 @Getter
 @Setter

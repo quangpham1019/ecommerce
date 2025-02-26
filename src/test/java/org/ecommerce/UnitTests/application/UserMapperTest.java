@@ -1,8 +1,8 @@
 package org.ecommerce.UnitTests.application;
 
-import org.ecommerce.user.application.dto.UserCreateDTO;
-import org.ecommerce.user.application.dto.UserProfileDTO;
-import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.application.dto.userDTO.UserCreateDTO;
+import org.ecommerce.user.application.dto.userDTO.UserProfileDTO;
+import org.ecommerce.user.application.dto.userDTO.UserResponseDTO;
 import org.ecommerce.user.application.mapper.interfaces.UserMapper;
 import org.ecommerce.user.domain.model.Role;
 import org.ecommerce.user.domain.model.User;

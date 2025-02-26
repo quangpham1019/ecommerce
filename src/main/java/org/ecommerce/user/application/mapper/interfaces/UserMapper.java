@@ -1,7 +1,7 @@
 package org.ecommerce.user.application.mapper.interfaces;
-import org.ecommerce.user.application.dto.UserCreateDTO;
-import org.ecommerce.user.application.dto.UserProfileDTO;
-import org.ecommerce.user.application.dto.UserResponseDTO;
+import org.ecommerce.user.application.dto.userDTO.UserCreateDTO;
+import org.ecommerce.user.application.dto.userDTO.UserProfileDTO;
+import org.ecommerce.user.application.dto.userDTO.UserResponseDTO;
 import org.ecommerce.user.domain.model.value_objects.Email;
 import org.ecommerce.user.domain.model.User;
 import org.ecommerce.user.domain.model.UserRole;

@@ -1,4 +1,4 @@
-package org.ecommerce.user.application.dto;
+package org.ecommerce.user.application.dto.userDTO;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
