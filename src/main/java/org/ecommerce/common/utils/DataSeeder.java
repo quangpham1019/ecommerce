@@ -5,9 +5,9 @@ import org.ecommerce.user.domain.model.*;
 import org.ecommerce.user.domain.model.enums.RolePermissionStatus;
 import org.ecommerce.user.domain.model.enums.UserRoleStatus;
 import org.ecommerce.user.domain.model.value_objects.Email;
-import org.ecommerce.user.domain.model.value_objects.UserStoredAddress;
 import org.ecommerce.user.infrastructure.repository.jpa.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -25,8 +25,9 @@ public class DataSeeder implements CommandLineRunner {
     private final UserAddressRepository userAddressRepository;
     private final UserProfileRepository userProfileRepository;
     private final UserAddressMapper userAddressMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataSeeder(RoleRepository roleRepository, UserRepository userRepository, UserRoleRepository userRoleRepository, AddressRepository addressRepository, PermissionRepository permissionRepository, RolePermissionRepository rolePermissionRepository, UserAddressRepository userAddressRepository, UserProfileRepository userProfileRepository, UserAddressMapper userAddressMapper) {
+    public DataSeeder(RoleRepository roleRepository, UserRepository userRepository, UserRoleRepository userRoleRepository, AddressRepository addressRepository, PermissionRepository permissionRepository, RolePermissionRepository rolePermissionRepository, UserAddressRepository userAddressRepository, UserProfileRepository userProfileRepository, UserAddressMapper userAddressMapper, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
@@ -36,6 +37,7 @@ public class DataSeeder implements CommandLineRunner {
         this.userAddressRepository = userAddressRepository;
         this.userProfileRepository = userProfileRepository;
         this.userAddressMapper = userAddressMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -58,26 +60,26 @@ public class DataSeeder implements CommandLineRunner {
     private void seedUsers() {
         if (userRepository.count() == 0) { // Avoid duplicate inserts
             userRepository.saveAll(Arrays.asList(
-                    new User("john_doe", "SecurePass123!", new Email("john.doe@example.com")),
-                    new User("jane_smith", "StrongPass456!", new Email("jane.smith@example.com")),
-                    new User("michael_j", "Pass9876#", new Email("michael.johnson@example.com")),
-                    new User("emily_d", "EmilyP@ssw0rd!", new Email("emily.davis@example.com")),
-                    new User("daniel_b", "Daniel123Secure!", new Email("daniel.brown@example.com")),
-                    new User("sophia_w", "Sophia789@", new Email("sophia.wilson@example.com")),
-                    new User("ethan_m", "EthanP@ssword!", new Email("ethan.miller@example.com")),
-                    new User("olivia_t", "Olivia_Secure789!", new Email("olivia.taylor@example.com")),
-                    new User("liam_k", "LiamPass321!", new Email("liam.king@example.com")),
-                    new User("ava_h", "Ava_Hunter#Pass!", new Email("ava.hall@example.com")),
-                    new User("noah_r", "Noah98765Pass!", new Email("noah.robinson@example.com")),
-                    new User("isabella_c", "IsaC@SecurePass!", new Email("isabella.carter@example.com")),
-                    new User("mason_g", "MasonGreatPass!", new Email("mason.green@example.com")),
-                    new User("mia_p", "MiaSuperSecure123!", new Email("mia.parker@example.com")),
-                    new User("logan_s", "Logan_Pass4321!", new Email("logan.stewart@example.com")),
-                    new User("charlotte_b", "Charlotte789#", new Email("charlotte.baker@example.com")),
-                    new User("lucas_m", "Lucas_SecretPass!", new Email("lucas.martin@example.com")),
-                    new User("amelia_t", "AmeliaPass432!", new Email("amelia.turner@example.com")),
-                    new User("william_f", "WillF@SuperPass!", new Email("william.foster@example.com")),
-                    new User("harper_d", "HarperD@789Pass!", new Email("harper.dixon@example.com"))
+                    new User("john_doe", passwordEncoder.encode("SecurePass123!"), new Email("john.doe@example.com")),
+                    new User("jane_smith", passwordEncoder.encode("StrongPass456!"), new Email("jane.smith@example.com")),
+                    new User("michael_j", passwordEncoder.encode("Pass9876#"), new Email("michael.johnson@example.com")),
+                    new User("emily_d", passwordEncoder.encode("EmilyP@ssw0rd!"), new Email("emily.davis@example.com")),
+                    new User("daniel_b", passwordEncoder.encode("Daniel123Secure!"), new Email("daniel.brown@example.com")),
+                    new User("sophia_w", passwordEncoder.encode("Sophia789@"), new Email("sophia.wilson@example.com")),
+                    new User("ethan_m", passwordEncoder.encode("EthanP@ssword!"), new Email("ethan.miller@example.com")),
+                    new User("olivia_t", passwordEncoder.encode("Olivia_Secure789!"), new Email("olivia.taylor@example.com")),
+                    new User("liam_k", passwordEncoder.encode("LiamPass321!"), new Email("liam.king@example.com")),
+                    new User("ava_h", passwordEncoder.encode("Ava_Hunter#Pass!"), new Email("ava.hall@example.com")),
+                    new User("noah_r", passwordEncoder.encode("Noah98765Pass!"), new Email("noah.robinson@example.com")),
+                    new User("isabella_c", passwordEncoder.encode("IsaC@SecurePass!"), new Email("isabella.carter@example.com")),
+                    new User("mason_g", passwordEncoder.encode("MasonGreatPass!"), new Email("mason.green@example.com")),
+                    new User("mia_p", passwordEncoder.encode("MiaSuperSecure123!"), new Email("mia.parker@example.com")),
+                    new User("logan_s", passwordEncoder.encode("Logan_Pass4321!"), new Email("logan.stewart@example.com")),
+                    new User("charlotte_b", passwordEncoder.encode("Charlotte789#"), new Email("charlotte.baker@example.com")),
+                    new User("lucas_m", passwordEncoder.encode("Lucas_SecretPass!"), new Email("lucas.martin@example.com")),
+                    new User("amelia_t", passwordEncoder.encode("AmeliaPass432!"), new Email("amelia.turner@example.com")),
+                    new User("william_f", passwordEncoder.encode("WillF@SuperPass!"), new Email("william.foster@example.com")),
+                    new User("harper_d", passwordEncoder.encode("HarperD@789Pass!"), new Email("harper.dixon@example.com"))
             ));
         }
     }

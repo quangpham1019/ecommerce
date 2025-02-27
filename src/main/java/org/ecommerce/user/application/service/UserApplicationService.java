@@ -16,6 +16,7 @@ import org.ecommerce.user.infrastructure.repository.jpa.UserRepository;
 import org.ecommerce.user.infrastructure.repository.jpa.UserRoleRepository;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,18 +36,21 @@ public class UserApplicationService {
     private final UserDomainService userDomainService;
     private final UserMapper userMapper;
     private final UserAddressMapper userAddressMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserApplicationService(UserRepository userRepository,
                                   RoleRepository roleRepository,
                                   UserRoleRepository userRoleRepository,
                                   UserDomainService userDomainService,
-                                  UserMapper userMapper, UserAddressMapper userAddressMapper) {
+                                  UserMapper userMapper, UserAddressMapper userAddressMapper,
+                                  PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.userDomainService = userDomainService;
         this.userMapper = userMapper;
         this.userAddressMapper = userAddressMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -76,6 +80,8 @@ public class UserApplicationService {
     public UserResponseDTO registerUser(UserCreateDTO userCreateDTO) {
         userDomainService.validateUniqueEmail(userCreateDTO.getEmail());
 
+        userCreateDTO.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
+
         User user = userMapper.toEntity(userCreateDTO);
         User registeredUser = userRepository.save(user);
 
@@ -91,6 +97,10 @@ public class UserApplicationService {
      */
     public List<User> registerUsers(List<User> users) {
         userDomainService.validateUniqueEmail(users);
+
+        users
+                .forEach(u -> u.setPassword(passwordEncoder.encode(u.getPassword())));
+
         return userRepository.saveAll(users);
     }
 
@@ -125,6 +135,9 @@ public class UserApplicationService {
         User existingEntity = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+//        if (userCreateDTO.getPassword()!=null) {
+//            userCreateDTO.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
+//        }
         // Convert the userCreateDTO into a map of non-null fields
         Map<String, Object> updates = convertToMap(userCreateDTO);
 

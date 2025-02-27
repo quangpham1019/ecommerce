@@ -34,6 +34,7 @@ public class User {
 
     private String password;
 
+    @Embedded
     @EqualsAndHashCode.Include
     @ToString.Include
     private Email email;
