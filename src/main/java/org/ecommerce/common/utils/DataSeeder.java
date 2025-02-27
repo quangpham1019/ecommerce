@@ -251,6 +251,7 @@ public class DataSeeder implements CommandLineRunner {
             userRoles.add(new UserRole(users.get(15), roles.get(0), UserRoleStatus.ACTIVE)); // User 16, ADMIN (Multiple roles)
 
             userRoles.add(new UserRole(users.get(16), roles.get(1), UserRoleStatus.ACTIVE)); // User 17, USER
+            userRoles.add(new UserRole(users.get(16), roles.get(2), UserRoleStatus.ACTIVE)); // User 17, MODERATOR
 
             userRoles.add(new UserRole(users.get(17), roles.get(2), UserRoleStatus.PENDING)); // User 18, MODERATOR
 

@@ -15,6 +15,8 @@ import org.ecommerce.user.domain.model.User;
 import org.ecommerce.user.domain.model.UserAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +33,7 @@ public class UserController {
     private final UserApplicationService userApplicationService;
 
     //region DEV-ONLY methods
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('MANAGE_USERS')")
     @Operation(
             summary = "Get all users",
             description = "Fetch a list of all registered users",
@@ -42,6 +45,7 @@ public class UserController {
     )
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication());
         return ResponseEntity.ok(userApplicationService.getUsers());
     }
     @PostMapping("/saveAll")
@@ -61,6 +65,7 @@ public class UserController {
         return ResponseEntity.ok(userApplicationService.registerUser(userCreateDTO));
     }
 
+    @PreAuthorize("hasAnyRole('MODERATOR') or hasAnyAuthority('MANAGE_USERS')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
 
@@ -74,6 +79,7 @@ public class UserController {
         return ResponseEntity.ok(userApplicationService.updatePartial(id, userCreateDTO));
     }
 
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping("/{id}/addresses")
     public ResponseEntity<List<UserAddressResponseDTO>> getUserAddressesByUserId(@PathVariable Long id) {
 
