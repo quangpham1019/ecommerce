@@ -23,6 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,6 +48,8 @@ public class UserApplicationServiceTest {
     private UserMapper userMapper;
     @Mock
     private UserAddressMapper userAddressMapper;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserApplicationService userApplicationService;
@@ -112,24 +115,28 @@ public class UserApplicationServiceTest {
     void registerUser_ShouldRegisterAndReturnUser_WhenEmailIsUnique() {
         // Arrange
         UserCreateDTO newUserCreateDTO = new UserCreateDTO("jim", "jimPass", "jim@gmail.com");
-        User newUser = new User("jim", "jimPass", new Email("jim@gmail.com"));
-        UserResponseDTO newUserResponseDTO = new UserResponseDTO(1L, "jim", "jim@gmail.com");
+        User newUser = new User("jim", "hashedJimPass", new Email("jim@gmail.com"));
+        UserResponseDTO expectedUserResponseDTO = new UserResponseDTO(1L, "jim", "jim@gmail.com");
 
         doNothing().when(userDomainService).validateUniqueEmail(newUserCreateDTO.getEmail());
+        when(passwordEncoder.encode(newUserCreateDTO.getPassword())).thenReturn("hashedJimPass");
         when(userMapper.toEntity(newUserCreateDTO)).thenReturn(newUser);
         when(userRepository.save(newUser)).thenReturn(newUser);
-        when(userMapper.toResponseDto(newUser)).thenReturn(newUserResponseDTO);
+        when(userMapper.toResponseDto(newUser)).thenReturn(expectedUserResponseDTO);
 
         // Act
-        UserResponseDTO registeredUser = userApplicationService.registerUser(newUserCreateDTO);
+        UserResponseDTO actualUserResponseDTO = userApplicationService.registerUser(newUserCreateDTO);
 
         // Assert
-        assertEquals(newUserResponseDTO, registeredUser);
+        assertEquals(expectedUserResponseDTO, actualUserResponseDTO);
         verify(userDomainService).validateUniqueEmail(newUserCreateDTO.getEmail());
+        verify(passwordEncoder).encode("jimPass");
         verify(userMapper).toEntity(newUserCreateDTO);
         verify(userMapper).toResponseDto(newUser);
         verify(userRepository).save(newUser);
     }
+    @Test
+    void registerUser_ShouldEncodePasswordAndSaveUser_WhenEmailIsUnique() {}
     @Test
     void registerUser_ShouldThrowException_WhenEmailAlreadyExists() {
         // Arrange
@@ -158,6 +165,7 @@ public class UserApplicationServiceTest {
                 new User("user1", "user1Pass", new Email("user1@gmail.com")),
                 new User("user2", "user2Pass", new Email("user2@gmail.com"))
         );
+        when(passwordEncoder.encode(anyString())).thenReturn("hashedPassword");
         when(userRepository.saveAll(users)).thenReturn(users);
 
         // Act
@@ -169,6 +177,8 @@ public class UserApplicationServiceTest {
         verify(userDomainService).validateUniqueEmail(users);
         verify(userRepository).saveAll(users);
     }
+    @Test
+    void registerUsers_ShouldEncodePasswordAndSaveUsers_WhenEmailsAreUnique() {}
     @Test
     void registerUsers_ShouldThrowException_WhenEmailsAreNullOrEmpty() {}
     @Test
