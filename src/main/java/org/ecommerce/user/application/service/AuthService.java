@@ -1,6 +1,7 @@
 package org.ecommerce.user.application.service;
 
-import org.ecommerce.user.application.dto.LoginDTO;
+import org.ecommerce.user.application.dto.authDTO.LoginDTO;
+import org.ecommerce.user.application.dto.authDTO.LoginResponseDTO;
 import org.ecommerce.user.infrastructure.security.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,13 +23,13 @@ public class AuthService {
 
     private final UserDetailsService userDetailsService;
 
-    public String login(LoginDTO loginDTO) {
+    public LoginResponseDTO login(LoginDTO loginDTO) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.getEmail());
 
-        return jwtUtil.generateToken(userDetails);
+        return new LoginResponseDTO(jwtUtil.generateToken(userDetails));
     }
 }
