@@ -1,5 +1,6 @@
 package org.ecommerce.user.infrastructure.security;
 
+import org.ecommerce.common.CorsConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -24,6 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -35,15 +37,17 @@ public class UserContextSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
+    private final CorsConfig corsConfig;
 
-    public UserContextSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService) {
+    public UserContextSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService, CorsConfig corsConfig) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
+        this.corsConfig = corsConfig;
     }
 
     @Bean(name = "userContextResources")
     @Order(0)
-    SecurityFilterChain resources(HttpSecurity http) throws Exception {
+    SecurityFilterChain resources(HttpSecurity http, WebMvcConfigurer corsConfigurer) throws Exception {
         return http
                 .securityMatcher("/api/users/**")
                 .authorizeHttpRequests(c -> c
@@ -53,7 +57,7 @@ public class UserContextSecurityConfig {
                 .sessionManagement(AbstractHttpConfigurer::disable)  // Disable session creation
                 .requestCache(RequestCacheConfigurer::disable)  // Disable request cache
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
+                .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource())) // Enable CORS
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)  // Add JWT filter
                 .build();
     }
@@ -94,17 +98,17 @@ public class UserContextSecurityConfig {
      *
      * @return CorsConfigurationSource that defines the CORS policy.
      */
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-        source.registerCorsConfiguration("/api/**", config);
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowedOrigins(List.of("http://localhost:3000"));
+//        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        config.setAllowedHeaders(List.of("*"));
+//        config.setAllowCredentials(true);
+//        source.registerCorsConfiguration("/api/**", config);
+//        return source;
+//    }
 
 //    @Bean
 //    SecurityFilterChain securityFilterChain(HttpSecurity http,
