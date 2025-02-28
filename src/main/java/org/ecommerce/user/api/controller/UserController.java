@@ -54,6 +54,7 @@ public class UserController {
     }
     //endregion
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping("/{userId}")
     public ResponseEntity<UserProfileDTO> getUser(@PathVariable Long userId) {
         return ResponseEntity.ok(userApplicationService.getUserProfile(userId));

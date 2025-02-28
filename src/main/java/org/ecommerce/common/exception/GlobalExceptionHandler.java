@@ -1,14 +1,19 @@
 package org.ecommerce.common.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.ecommerce.user.domain.exception.InvalidEmailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +45,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<Map<String, String>> handleMissingParams(MissingServletRequestParameterException ex) {
         return ResponseEntity.badRequest().body(Map.of("error", "Missing request parameter: " + ex.getParameterName()));
+    }
+
+    // Handle Authorization Denied Exceptions
+    // Thrown by Spring Security @PreAuthorize
+    // Spring Security does not seem to have a handler for this exception yet
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handleAuthorizationDenied(AuthorizationDeniedException ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(
+                "timestamp", LocalDateTime.now().toString(),
+                "status", HttpStatus.FORBIDDEN.value(),
+                "error", ex.getMessage(),
+                "path", ((ServletWebRequest) request).getRequest().getRequestURI()
+        ));
     }
 
     // Handle All Other Exceptions (Generic Error Handling)
