@@ -60,7 +60,7 @@ public class DataSeeder implements CommandLineRunner {
     private void seedUsers() {
         if (userRepository.count() == 0) { // Avoid duplicate inserts
             userRepository.saveAll(Arrays.asList(
-                    new User("john_doe", passwordEncoder.encode("SecurePass123!"), new Email("john.doe@example.com")),
+                    new User("john_doe", passwordEncoder.encode("qweQWE123!"), new Email("admin@gmail.com")),
                     new User("jane_smith", passwordEncoder.encode("StrongPass456!"), new Email("jane.smith@example.com")),
                     new User("michael_j", passwordEncoder.encode("Pass9876#"), new Email("michael.johnson@example.com")),
                     new User("emily_d", passwordEncoder.encode("EmilyP@ssw0rd!"), new Email("emily.davis@example.com")),
@@ -210,54 +210,81 @@ public class DataSeeder implements CommandLineRunner {
             List<UserRole> userRoles = new ArrayList<>();
 
             // Assign roles manually to existing users with multiple roles for some
-            userRoles.add(new UserRole(users.get(0), roles.get(0), UserRoleStatus.ACTIVE));  // User 1, ADMIN
-            userRoles.add(new UserRole(users.get(0), roles.get(1), UserRoleStatus.ACTIVE));  // User 1, USER (Multiple roles)
+            // Assuming roles are predefined, e.g.
+            Role adminRole = roles.get(0); // ADMIN
+            Role userRole = roles.get(1);  // USER
+            Role moderatorRole = roles.get(2); // MODERATOR
 
-            userRoles.add(new UserRole(users.get(1), roles.get(1), UserRoleStatus.PENDING)); // User 2, USER
-            userRoles.add(new UserRole(users.get(1), roles.get(2), UserRoleStatus.PENDING)); // User 2, MODERATOR (Multiple roles)
+            // User 1: All roles active (ADMIN, USER, MODERATOR)
+            userRoles.add(new UserRole(users.get(0), adminRole, UserRoleStatus.ACTIVE));  // User 1, ADMIN
+            userRoles.add(new UserRole(users.get(0), userRole, UserRoleStatus.ACTIVE));   // User 1, USER
+            userRoles.add(new UserRole(users.get(0), moderatorRole, UserRoleStatus.ACTIVE)); // User 1, MODERATOR
 
-            userRoles.add(new UserRole(users.get(2), roles.get(2), UserRoleStatus.INACTIVE)); // User 3, MODERATOR
-            userRoles.add(new UserRole(users.get(2), roles.get(1), UserRoleStatus.INACTIVE)); // User 3, USER (Multiple roles)
+            // User 2: 1 active role (USER), 1 pending role (MODERATOR)
+            userRoles.add(new UserRole(users.get(1), userRole, UserRoleStatus.ACTIVE));   // User 2, USER
+            userRoles.add(new UserRole(users.get(1), moderatorRole, UserRoleStatus.PENDING)); // User 2, MODERATOR
 
-            userRoles.add(new UserRole(users.get(3), roles.get(0), UserRoleStatus.ACTIVE));  // User 4, ADMIN
-            userRoles.add(new UserRole(users.get(3), roles.get(1), UserRoleStatus.ACTIVE));  // User 4, USER (Multiple roles)
+            // User 3: 1 active role (USER), 1 inactive role (MODERATOR)
+            userRoles.add(new UserRole(users.get(2), userRole, UserRoleStatus.ACTIVE));   // User 3, USER
+            userRoles.add(new UserRole(users.get(2), moderatorRole, UserRoleStatus.INACTIVE)); // User 3, MODERATOR
 
-            userRoles.add(new UserRole(users.get(4), roles.get(1), UserRoleStatus.ACTIVE));  // User 5, USER
+            // User 4: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(3), userRole, UserRoleStatus.ACTIVE));   // User 4, USER
 
-            userRoles.add(new UserRole(users.get(5), roles.get(2), UserRoleStatus.PENDING)); // User 6, MODERATOR
-            userRoles.add(new UserRole(users.get(5), roles.get(1), UserRoleStatus.PENDING)); // User 6, USER (Multiple roles)
+            // User 5: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(4), userRole, UserRoleStatus.ACTIVE));   // User 5, USER
 
-            userRoles.add(new UserRole(users.get(6), roles.get(1), UserRoleStatus.INACTIVE)); // User 7, USER
+            // User 6: 1 active role (USER), 1 pending role (MODERATOR)
+            userRoles.add(new UserRole(users.get(5), userRole, UserRoleStatus.ACTIVE));   // User 6, USER
+            userRoles.add(new UserRole(users.get(5), moderatorRole, UserRoleStatus.PENDING)); // User 6, MODERATOR
 
-            userRoles.add(new UserRole(users.get(7), roles.get(0), UserRoleStatus.ACTIVE));  // User 8, ADMIN
+            // User 7: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(6), userRole, UserRoleStatus.ACTIVE));   // User 7, USER
 
-            userRoles.add(new UserRole(users.get(8), roles.get(2), UserRoleStatus.PENDING)); // User 9, MODERATOR
-            userRoles.add(new UserRole(users.get(8), roles.get(1), UserRoleStatus.PENDING)); // User 9, USER (Multiple roles)
+            // User 8: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(7), userRole, UserRoleStatus.ACTIVE));   // User 8, USER
 
-            userRoles.add(new UserRole(users.get(9), roles.get(1), UserRoleStatus.INACTIVE)); // User 10, USER
+            // User 9: 1 active role (USER), 1 pending role (MODERATOR)
+            userRoles.add(new UserRole(users.get(8), userRole, UserRoleStatus.ACTIVE));   // User 9, USER
+            userRoles.add(new UserRole(users.get(8), moderatorRole, UserRoleStatus.PENDING)); // User 9, MODERATOR
 
-            userRoles.add(new UserRole(users.get(10), roles.get(0), UserRoleStatus.ACTIVE)); // User 11, ADMIN
+            // User 10: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(9), userRole, UserRoleStatus.ACTIVE));   // User 10, USER
 
-            userRoles.add(new UserRole(users.get(11), roles.get(1), UserRoleStatus.PENDING)); // User 12, USER
+            // User 11: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(10), userRole, UserRoleStatus.ACTIVE));  // User 11, USER
 
-            userRoles.add(new UserRole(users.get(12), roles.get(2), UserRoleStatus.INACTIVE)); // User 13, MODERATOR
+            // User 12: 1 active role (USER), 1 inactive role (MODERATOR)
+            userRoles.add(new UserRole(users.get(11), userRole, UserRoleStatus.ACTIVE));  // User 12, USER
+            userRoles.add(new UserRole(users.get(11), moderatorRole, UserRoleStatus.INACTIVE)); // User 12, MODERATOR
 
-            userRoles.add(new UserRole(users.get(13), roles.get(0), UserRoleStatus.ACTIVE)); // User 14, ADMIN
-            userRoles.add(new UserRole(users.get(13), roles.get(1), UserRoleStatus.ACTIVE)); // User 14, USER (Multiple roles)
+            // User 13: 1 active role (USER), 1 inactive role (MODERATOR)
+            userRoles.add(new UserRole(users.get(12), userRole, UserRoleStatus.ACTIVE));  // User 13, USER
+            userRoles.add(new UserRole(users.get(12), moderatorRole, UserRoleStatus.INACTIVE)); // User 13, MODERATOR
 
-            userRoles.add(new UserRole(users.get(14), roles.get(1), UserRoleStatus.PENDING)); // User 15, USER
+            // User 14: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(13), userRole, UserRoleStatus.ACTIVE));  // User 14, USER
 
-            userRoles.add(new UserRole(users.get(15), roles.get(2), UserRoleStatus.INACTIVE)); // User 16, MODERATOR
-            userRoles.add(new UserRole(users.get(15), roles.get(0), UserRoleStatus.ACTIVE)); // User 16, ADMIN (Multiple roles)
+            // User 15: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(14), userRole, UserRoleStatus.ACTIVE));  // User 15, USER
 
-            userRoles.add(new UserRole(users.get(16), roles.get(1), UserRoleStatus.ACTIVE)); // User 17, USER
-            userRoles.add(new UserRole(users.get(16), roles.get(2), UserRoleStatus.ACTIVE)); // User 17, MODERATOR
+            // User 16: 1 active role (USER), 1 inactive role (MODERATOR)
+            userRoles.add(new UserRole(users.get(15), userRole, UserRoleStatus.ACTIVE));  // User 16, USER
+            userRoles.add(new UserRole(users.get(15), moderatorRole, UserRoleStatus.INACTIVE)); // User 16, MODERATOR
 
-            userRoles.add(new UserRole(users.get(17), roles.get(2), UserRoleStatus.PENDING)); // User 18, MODERATOR
+            // User 17: 1 active role (USER), 1 active role (MODERATOR)
+            userRoles.add(new UserRole(users.get(16), userRole, UserRoleStatus.ACTIVE));  // User 17, USER
+            userRoles.add(new UserRole(users.get(16), moderatorRole, UserRoleStatus.ACTIVE)); // User 17, MODERATOR
 
-            userRoles.add(new UserRole(users.get(18), roles.get(0), UserRoleStatus.INACTIVE)); // User 19, ADMIN
+            // User 18: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(17), userRole, UserRoleStatus.ACTIVE));  // User 18, USER
 
-            userRoles.add(new UserRole(users.get(19), roles.get(1), UserRoleStatus.ACTIVE)); // User 20, USER
+            // User 19: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(18), userRole, UserRoleStatus.ACTIVE));  // User 19, USER
+
+            // User 20: 1 active role (USER)
+            userRoles.add(new UserRole(users.get(19), userRole, UserRoleStatus.ACTIVE));  // User 20, USER
+
 
             // Save all UserRole entities to the repository
             userRoleRepository.saveAll(userRoles);

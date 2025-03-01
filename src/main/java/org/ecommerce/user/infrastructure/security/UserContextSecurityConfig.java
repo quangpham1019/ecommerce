@@ -16,19 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.List;
-
 
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
@@ -47,7 +34,7 @@ public class UserContextSecurityConfig {
 
     @Bean(name = "userContextResources")
     @Order(0)
-    SecurityFilterChain resources(HttpSecurity http, WebMvcConfigurer corsConfigurer) throws Exception {
+    SecurityFilterChain resources(HttpSecurity http) throws Exception {
         return http
                 .securityMatcher("/api/users/**")
                 .authorizeHttpRequests(c -> c
@@ -80,35 +67,6 @@ public class UserContextSecurityConfig {
         authProvider.setHideUserNotFoundExceptions(false); // Ensures exception is thrown when user not found
         return authProvider;
     }
-
-    /**
-     * Configures CORS (Cross-Origin Resource Sharing) for the application.
-     *
-     * <p>This method defines a CORS policy that allows frontend applications running on
-     * <strong>http://localhost:3000</strong> to interact with the backend API.</p>
-     *
-     * <p><b>Key Configurations:</b></p>
-     * <ul>
-     *     <li>Allowed Origin: <code>http://localhost:3000</code> (Frontend application)</li>
-     *     <li>Allowed Methods: GET, POST, PUT, DELETE, OPTIONS</li>
-     *     <li>Allowed Headers: All headers are permitted</li>
-     *     <li>Allow Credentials: Enables sending cookies and authorization headers</li>
-     *     <li>Applies CORS settings to all endpoints under <code>/api/**</code></li>
-     * </ul>
-     *
-     * @return CorsConfigurationSource that defines the CORS policy.
-     */
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowedOrigins(List.of("http://localhost:3000"));
-//        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//        config.setAllowedHeaders(List.of("*"));
-//        config.setAllowCredentials(true);
-//        source.registerCorsConfiguration("/api/**", config);
-//        return source;
-//    }
 
 //    @Bean
 //    SecurityFilterChain securityFilterChain(HttpSecurity http,
