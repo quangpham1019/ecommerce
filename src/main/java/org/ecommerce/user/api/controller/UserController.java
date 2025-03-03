@@ -1,6 +1,8 @@
 package org.ecommerce.user.api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,7 +14,6 @@ import org.ecommerce.user.application.dto.userDTO.UserProfileDTO;
 import org.ecommerce.user.application.dto.userDTO.UserResponseDTO;
 import org.ecommerce.user.application.service.UserApplicationService;
 import org.ecommerce.user.domain.model.User;
-import org.ecommerce.user.domain.model.UserAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

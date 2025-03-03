@@ -18,13 +18,14 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginRequest) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated()) {
-            throw new AuthorizationDeniedException("User is already authenticated");
-        }
-        return ResponseEntity.ok(authService.login(loginRequest));
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginRequest) {
+//
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null && auth.isAuthenticated()) {
+//            throw new AuthorizationDeniedException("User is already authenticated");
+//        }
+//        return ResponseEntity.ok(authService.login(loginRequest));
+//    }
 }
