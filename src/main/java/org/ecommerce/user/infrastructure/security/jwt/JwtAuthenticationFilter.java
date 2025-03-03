@@ -1,4 +1,4 @@
-package org.ecommerce.user.infrastructure.security;
+package org.ecommerce.user.infrastructure.security.jwt;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

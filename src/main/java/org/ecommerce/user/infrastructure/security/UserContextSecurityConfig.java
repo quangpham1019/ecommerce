@@ -1,6 +1,5 @@
 package org.ecommerce.user.infrastructure.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ecommerce.common.CorsConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,19 +23,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class UserContextSecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
     private final CorsConfig corsConfig;
-    private final ObjectMapper objectMapper;
 
-    public UserContextSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
-                                     UserDetailsService userDetailsService,
-                                     CorsConfig corsConfig,
-                                     ObjectMapper objectMapper) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    public UserContextSecurityConfig(UserDetailsService userDetailsService,
+                                     CorsConfig corsConfig) {
         this.userDetailsService = userDetailsService;
         this.corsConfig = corsConfig;
-        this.objectMapper = objectMapper;
     }
 
     @Bean(name = "userContextResources")
