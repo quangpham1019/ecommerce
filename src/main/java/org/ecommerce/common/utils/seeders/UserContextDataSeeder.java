@@ -1,4 +1,4 @@
-package org.ecommerce.common.utils;
+package org.ecommerce.common.utils.seeders;
 
 import org.ecommerce.user.application.mapper.interfaces.UserAddressMapper;
 import org.ecommerce.user.domain.model.*;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.sql.Date;
 
 @Component
-public class DataSeeder implements CommandLineRunner {
+public class UserContextDataSeeder implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
@@ -27,7 +27,7 @@ public class DataSeeder implements CommandLineRunner {
     private final UserAddressMapper userAddressMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public DataSeeder(RoleRepository roleRepository, UserRepository userRepository, UserRoleRepository userRoleRepository, AddressRepository addressRepository, PermissionRepository permissionRepository, RolePermissionRepository rolePermissionRepository, UserAddressRepository userAddressRepository, UserProfileRepository userProfileRepository, UserAddressMapper userAddressMapper, PasswordEncoder passwordEncoder) {
+    public UserContextDataSeeder(RoleRepository roleRepository, UserRepository userRepository, UserRoleRepository userRoleRepository, AddressRepository addressRepository, PermissionRepository permissionRepository, RolePermissionRepository rolePermissionRepository, UserAddressRepository userAddressRepository, UserProfileRepository userProfileRepository, UserAddressMapper userAddressMapper, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;

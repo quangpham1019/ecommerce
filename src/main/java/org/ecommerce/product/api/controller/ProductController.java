@@ -17,9 +17,9 @@ public class ProductController {
     public List<Product> getProducts() {
 
         return Arrays.asList(
-                new Product("Water gun"),
-                new Product("Fire gun"),
-                new Product("Air gun")
+//                new Product("Water gun", "zzzzzzzzz", 1.0),
+//                new Product("Fire gun", "brrrrrrrr", 2.0),
+//                new Product("Air gun", "zzoooooooooo", 3.0)
                 );
     }
 }

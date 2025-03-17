@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Path to root directory
+path_to_root_dir="../"
+
 # Function to prompt user for input
 prompt_input() {
     local prompt_message=$1
@@ -17,11 +20,11 @@ BASE_CLASS_PREFIX="Common"
 IMPL_SUFFIX="_JpaRepository"
 
 # Set the input directory based on the package and context
-input_directory="src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/domain/model"
+input_directory="$path_to_root_dir/src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/domain/model"
 
 # Set the output directory based on the package and context
-output_directory_impl="src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/infrastructure/service"
-output_directory_interface="src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/infrastructure/service/interfaces"
+output_directory_impl="$path_to_root_dir/src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/infrastructure/service"
+output_directory_interface="$path_to_root_dir/src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/infrastructure/service/interfaces"
 
 # Create the output directory if it doesn't exist
 mkdir -p "$output_directory_impl"

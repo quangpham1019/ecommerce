@@ -1,49 +1,37 @@
 package org.ecommerce.product.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class Product {
+public class Inventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    private String name;
-    private String description;
+    private int quantity;
 
-    private Long sellerId;
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id")
+    private Warehouse warehouse;
 
-    @OneToOne
-    @JoinColumn(name = "primary_variant_id", unique = true)
-    private ProductVariant primaryVariant;
+    @ManyToOne
+    @JoinColumn(name = "product_variant_id")
+    private ProductVariant productVariant;
 
-    @ManyToMany
-    @JoinTable(
-            name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    @ToString.Exclude
-    private Set<Category> categories;
-
-
-    public Product(String name, String description, ProductVariant primaryVariant,  Set<Category> categories) {
-        this.name = name;
-        this.description = description;
-        this.primaryVariant = primaryVariant;
-        this.categories = categories;
+    public Inventory(int quantity, Warehouse warehouse, ProductVariant productVariant) {
+        this.quantity = quantity;
+        this.warehouse = warehouse;
+        this.productVariant = productVariant;
     }
 
     @Override
@@ -53,12 +41,12 @@ public class Product {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Product product = (Product) o;
+        Inventory inventory = (Inventory) o;
 
-        if (getId() != null && product.getId() != null)
-            return Objects.equals(getId(), product.getId());
+        if (getId() != null && inventory.getId() != null)
+            return Objects.equals(getId(), inventory.getId());
 
-        return Objects.equals(getName(), product.getName());
+        return Objects.equals(getProductVariant().getId(), inventory.getProductVariant().getId()) && Objects.equals(getWarehouse().getId(), inventory.getWarehouse().getId());
     }
 
     @Override
@@ -68,6 +56,6 @@ public class Product {
 
         if (getId() != null) return Objects.hash(getId());
 
-        return Objects.hash(getName());
+        return Objects.hash(getProductVariant().getId(), getWarehouse().getId());
     }
 }

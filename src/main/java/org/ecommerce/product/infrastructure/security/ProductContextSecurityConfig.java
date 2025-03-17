@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -16,10 +18,10 @@ public class ProductContextSecurityConfig {
         return http
                 .securityMatcher("/api/products/**")
                 .authorizeHttpRequests(c -> c.anyRequest().permitAll())
-                .securityContext(c -> c.disable())  // Disable security context (for stateless APIs)
-                .sessionManagement(c -> c.disable())  // Disable session creation
-                .requestCache(c -> c.disable())  // Disable request cache (if not needed)
-                .csrf(csrf -> csrf.disable())
+                .securityContext(AbstractHttpConfigurer::disable)  // Disable security context (for stateless APIs)
+                .sessionManagement(AbstractHttpConfigurer::disable)  // Disable session creation
+                .requestCache(RequestCacheConfigurer::disable)  // Disable request cache (if not needed)
+                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 

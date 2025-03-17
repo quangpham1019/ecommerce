@@ -13,37 +13,24 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString
-public class Product {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    private String name;
-    private String description;
+    private String categoryName;
+    private String categoryDescription;
 
-    private Long sellerId;
-
-    @OneToOne
-    @JoinColumn(name = "primary_variant_id", unique = true)
-    private ProductVariant primaryVariant;
-
-    @ManyToMany
-    @JoinTable(
-            name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
+    @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     @ToString.Exclude
-    private Set<Category> categories;
+    private Set<Product> products;
 
-
-    public Product(String name, String description, ProductVariant primaryVariant,  Set<Category> categories) {
-        this.name = name;
-        this.description = description;
-        this.primaryVariant = primaryVariant;
-        this.categories = categories;
+    public Category(String categoryName, String categoryDescription) {
+        this.categoryName = categoryName;
+        this.categoryDescription = categoryDescription;
     }
 
     @Override
@@ -53,12 +40,12 @@ public class Product {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Product product = (Product) o;
+        Category category = (Category) o;
 
-        if (getId() != null && product.getId() != null)
-            return Objects.equals(getId(), product.getId());
+        if (getId() != null && category.getId() != null)
+            return Objects.equals(getId(), category.getId());
 
-        return Objects.equals(getName(), product.getName());
+        return Objects.equals(getCategoryName(), category.getCategoryName());
     }
 
     @Override
@@ -68,6 +55,6 @@ public class Product {
 
         if (getId() != null) return Objects.hash(getId());
 
-        return Objects.hash(getName());
+        return Objects.hash(getCategoryName());
     }
 }

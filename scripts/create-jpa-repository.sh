@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Path to root directory
+path_to_root_dir="../"
+
 # Function to prompt user for input
 prompt_input() {
     local prompt_message=$1
@@ -13,10 +16,10 @@ PROJECT_PACKAGE=$(prompt_input "Enter your project package name" "org/ecommerce"
 CONTEXT_NAME=$(prompt_input "Enter your context name" "my_context")
 
 # Set the input directory based on the package and context
-input_directory="src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/domain/model"
+input_directory="$path_to_root_dir/src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/domain/model"
 
 # Set the output directory based on the package and context
-output_directory="src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/infrastructure/repository/jpa"
+output_directory="$path_to_root_dir/src/main/java/$PROJECT_PACKAGE/$CONTEXT_NAME/infrastructure/repository/jpa"
 
 # Create the output directory if it doesn't exist
 mkdir -p "$output_directory"
