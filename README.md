@@ -10,14 +10,15 @@ This project aim to develop a backend service for an ecommerce platform similar 
 
 ## **User Context**
 
-- Designing DTOs for User entity
-- Refactoring controllers, services to use UserDTOs
-- Create domain and app services for Role, Permission
-- Enforce RBAC authorization on endpoints
+- Enforce RBAC authorization on endpoints.
+- Increase test coverage.
 
 ## **Product Context**
-- Develop the business logic for adding, removing, updating products
-- Only sellers can add/update/remove products
+- Develop the business logic for adding, removing, updating products.
+- Only sellers can add/update/remove products.
+- Implement Central Token Verification Service to secure communication from/to User Context.
+
+
 </details>
 
 <details>
