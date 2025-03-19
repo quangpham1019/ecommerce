@@ -69,6 +69,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
 
         List<Product> products = Arrays.asList(
                 new Product(
+                        5L,
                         "Laptop Pro",
                         "High-performance laptop for professionals",
                         new ProductVariant("Laptop Pro 16GB", "16GB RAM, 512GB SSD", 1099.99, "laptop.jpg", null),
@@ -76,6 +77,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        10L,
                         "Smartphone X",
                         "Latest generation smartphone with advanced camera",
                         new ProductVariant("Smartphone X 128GB", "128GB Storage, 6GB RAM", 699.99, "phone.jpg", null),
@@ -83,6 +85,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        5L,
                         "Gaming Mouse Ultra",
                         "Precision gaming mouse with customizable buttons",
                         new ProductVariant("Gaming Mouse RGB", "RGB Lighting edition", 59.99, "mouse.jpg", null),
@@ -90,6 +93,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        10L,
                         "Wireless Earbuds Pro",
                         "Noise-canceling earbuds with premium sound quality",
                         new ProductVariant("Earbuds Pro", "Noise-canceling edition", 129.99, "earbuds.jpg", null),
@@ -97,6 +101,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        10L,
                         "4K Smart TV",
                         "55-inch UHD TV with HDR support",
                         new ProductVariant("Smart TV 55-inch", "Ultra HD with HDR10+", 499.99, "tv.jpg", null),
@@ -104,6 +109,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        5L,
                         "Fitness Tracker",
                         "Track your steps, heart rate, and workouts",
                         new ProductVariant("Fitness Tracker Pro", "Advanced heart rate monitoring", 79.99, "tracker.jpg", null),
@@ -111,6 +117,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        17L,
                         "Bluetooth Speaker",
                         "Portable speaker with deep bass",
                         new ProductVariant("Speaker Bass+", "Water-resistant, 10-hour battery life", 59.99, "speaker.jpg", null),
@@ -118,6 +125,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        17L,
                         "Mechanical Gaming Keyboard",
                         "Tactile switches and RGB lighting",
                         new ProductVariant("Keyboard RGB", "Customizable lighting", 89.99, "keyboard.jpg", null),
@@ -125,6 +133,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        17L,
                         "Robot Vacuum Cleaner",
                         "Smart home cleaning solution",
                         new ProductVariant("Vacuum AutoClean", "AI-powered navigation", 249.99, "vacuum.jpg", null),
@@ -132,6 +141,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        9L,
                         "Smartwatch Series 5",
                         "Advanced health tracking and notifications",
                         new ProductVariant("Smartwatch Premium", "GPS & LTE model", 299.99, "watch.jpg", null),
@@ -139,6 +149,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        9L,
                         "Gaming Headset",
                         "Surround sound with noise cancellation",
                         new ProductVariant("Headset Pro", "7.1 surround sound", 149.99, "headset.jpg", null),
@@ -146,6 +157,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        9L,
                         "DSLR Camera",
                         "Professional photography camera",
                         new ProductVariant("Camera 24MP", "24MP sensor with 4K video", 799.99, "camera.jpg", null),
@@ -153,6 +165,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        8L,
                         "Home Security Camera",
                         "Smart surveillance with motion detection",
                         new ProductVariant("Security Cam", "1080p, night vision", 99.99, "securitycam.jpg", null),
@@ -160,6 +173,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        8L,
                         "Electric Scooter",
                         "Eco-friendly commuting solution",
                         new ProductVariant("Scooter Max", "25-mile range, 15mph top speed", 399.99, "scooter.jpg", null),
@@ -167,6 +181,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                 ),
 
                 new Product(
+                        17L,
                         "Portable Projector",
                         "Compact projector for movies and presentations",
                         new ProductVariant("Projector Mini", "HD resolution, built-in speakers", 149.99, "projector.jpg", null),

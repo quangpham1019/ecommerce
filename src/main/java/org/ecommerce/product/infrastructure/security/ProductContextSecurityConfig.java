@@ -1,5 +1,6 @@
 package org.ecommerce.product.infrastructure.security;
 
+import org.ecommerce.common.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -7,49 +8,29 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 //@EnableWebSecurity
 public class ProductContextSecurityConfig {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    public ProductContextSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
     @Bean(name = "productContextResources")
     @Order(0)
     SecurityFilterChain resources(HttpSecurity http) throws Exception {
         return http
                 .securityMatcher("/api/products/**")
-                .authorizeHttpRequests(c -> c.anyRequest().permitAll())
+                .authorizeHttpRequests(c -> c
+                        .anyRequest().permitAll())
                 .securityContext(AbstractHttpConfigurer::disable)  // Disable security context (for stateless APIs)
                 .sessionManagement(AbstractHttpConfigurer::disable)  // Disable session creation
                 .requestCache(RequestCacheConfigurer::disable)  // Disable request cache (if not needed)
                 .csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-//    @Bean
-//    SecurityFilterChain securityFilterChain(HttpSecurity http,
-//                                            OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2LoginHandler,
-//                                            OAuth2UserService<OidcUserRequest, OidcUser> oidcLoginHandler) throws Exception {
-//        return http
-//                .formLogin(c -> c.loginPage("/api/v1/auth/signInPage")
-//                        .loginProcessingUrl("/api/v1/auth/signInProcess")
-//                        .usernameParameter("user")
-//                        .passwordParameter("pass")
-//                        .defaultSuccessUrl("/inventory")
-//                )
-//                .logout(c -> c.logoutSuccessUrl("/?logout"))
-//                .oauth2Login(oc -> oc
-//                        .loginPage("/api/v1/auth/signInPage")
-//                        .defaultSuccessUrl("/inventory")
-//                        .userInfoEndpoint(ui -> ui
-//                                .userService(oauth2LoginHandler)
-//                                .oidcUserService(oidcLoginHandler)))
-//                .authorizeHttpRequests(c -> c
-//                        .requestMatchers(EndpointRequest.to("info", "health", "prometheus")).permitAll()
-//                        .requestMatchers(EndpointRequest.toAnyEndpoint().excluding("info", "health", "prometheus")).hasAuthority("manage")
-//                        .requestMatchers("/", "/login", "/user/sign-up", "/error").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .build();
-//    }
 
 }

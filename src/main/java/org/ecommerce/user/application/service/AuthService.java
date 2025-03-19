@@ -2,7 +2,7 @@ package org.ecommerce.user.application.service;
 
 import org.ecommerce.user.application.dto.authDTO.LoginDTO;
 import org.ecommerce.user.application.dto.authDTO.LoginResponseDTO;
-import org.ecommerce.user.infrastructure.security.jwt.JwtUtil;
+import org.ecommerce.common.jwt.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

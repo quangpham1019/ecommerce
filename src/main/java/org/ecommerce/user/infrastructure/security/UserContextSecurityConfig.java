@@ -1,6 +1,6 @@
 package org.ecommerce.user.infrastructure.security;
 
-import org.ecommerce.common.CorsConfig;
+import org.ecommerce.common.config.CorsConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -25,11 +25,14 @@ public class UserContextSecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final CorsConfig corsConfig;
+    private final JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler;
 
     public UserContextSecurityConfig(UserDetailsService userDetailsService,
-                                     CorsConfig corsConfig) {
+                                     CorsConfig corsConfig,
+                                     JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.corsConfig = corsConfig;
+        this.jwtAuthenticationSuccessHandler = jwtAuthenticationSuccessHandler;
     }
 
     @Bean(name = "userContextResources")
@@ -46,11 +49,12 @@ public class UserContextSecurityConfig {
                         .expiredUrl("/login") // Optional: redirect on session expiration
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/api/users", true)  // Redirect after login
+                        .successHandler(jwtAuthenticationSuccessHandler)
+//                        .defaultSuccessUrl("/api/users", true)  // Redirect after login
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 )

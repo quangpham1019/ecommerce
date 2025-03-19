@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.repository.cdi.Eager;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,19 +29,26 @@ public class Product {
 
     @OneToOne
     @JoinColumn(name = "primary_variant_id", unique = true)
+    @JsonIgnore
+    @ToString.Exclude
     private ProductVariant primaryVariant;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    @ToString.Exclude
+    private Set<ProductVariant> productVariants;
+
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
             name = "product_category",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    @ToString.Exclude
     private Set<Category> categories;
 
 
-    public Product(String name, String description, ProductVariant primaryVariant,  Set<Category> categories) {
+    public Product(Long sellerId, String name, String description, ProductVariant primaryVariant,  Set<Category> categories) {
+        this.sellerId = sellerId;
         this.name = name;
         this.description = description;
         this.primaryVariant = primaryVariant;
