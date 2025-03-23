@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ecommerce.product.domain.model.value_objects.Price;
 
 @Getter
 @Setter
@@ -12,5 +13,5 @@ import lombok.Setter;
 public class ListProductDetailsDTO {
     private String name;
     private String imageUrl;
-    private double price;
+    private Price price;
 }

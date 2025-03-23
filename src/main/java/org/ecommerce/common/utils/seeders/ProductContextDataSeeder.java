@@ -1,10 +1,12 @@
 package org.ecommerce.common.utils.seeders;
 
 import org.ecommerce.product.domain.model.*;
+import org.ecommerce.product.domain.model.value_objects.Price;
 import org.ecommerce.product.infrastructure.repository.jpa.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,7 +74,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         5L,
                         "Laptop Pro",
                         "High-performance laptop for professionals",
-                        new ProductVariant("Laptop Pro 16GB", "16GB RAM, 512GB SSD", 1099.99, "laptop.jpg", null),
+                        new ProductVariant("Laptop Pro 16GB", "16GB RAM, 512GB SSD", new Price(new BigDecimal(1099.99), "USD"), "laptop.jpg", null),
                         Set.of(electronics, computers)
                 ),
 
@@ -80,7 +82,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         10L,
                         "Smartphone X",
                         "Latest generation smartphone with advanced camera",
-                        new ProductVariant("Smartphone X 128GB", "128GB Storage, 6GB RAM", 699.99, "phone.jpg", null),
+                        new ProductVariant("Smartphone X 128GB", "128GB Storage, 6GB RAM", new Price(new BigDecimal(699.99), "USD"), "phone.jpg", null),
                         Set.of(electronics, mobilePhones)
                 ),
 
@@ -88,7 +90,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         5L,
                         "Gaming Mouse Ultra",
                         "Precision gaming mouse with customizable buttons",
-                        new ProductVariant("Gaming Mouse RGB", "RGB Lighting edition", 59.99, "mouse.jpg", null),
+                        new ProductVariant("Gaming Mouse RGB", "RGB Lighting edition", new Price(new BigDecimal(59.99), "USD"), "mouse.jpg", null),
                         Set.of(gaming, accessories)
                 ),
 
@@ -96,7 +98,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         10L,
                         "Wireless Earbuds Pro",
                         "Noise-canceling earbuds with premium sound quality",
-                        new ProductVariant("Earbuds Pro", "Noise-canceling edition", 129.99, "earbuds.jpg", null),
+                        new ProductVariant("Earbuds Pro", "Noise-canceling edition", new Price(new BigDecimal(129.99), "USD"), "earbuds.jpg", null),
                         Set.of(accessories, electronics)
                 ),
 
@@ -104,7 +106,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         10L,
                         "4K Smart TV",
                         "55-inch UHD TV with HDR support",
-                        new ProductVariant("Smart TV 55-inch", "Ultra HD with HDR10+", 499.99, "tv.jpg", null),
+                        new ProductVariant("Smart TV 55-inch", "Ultra HD with HDR10+", new Price(new BigDecimal(499.99), "USD"), "tv.jpg", null),
                         Set.of(electronics, homeAppliances)
                 ),
 
@@ -112,7 +114,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         5L,
                         "Fitness Tracker",
                         "Track your steps, heart rate, and workouts",
-                        new ProductVariant("Fitness Tracker Pro", "Advanced heart rate monitoring", 79.99, "tracker.jpg", null),
+                        new ProductVariant("Fitness Tracker Pro", "Advanced heart rate monitoring", new Price(new BigDecimal(79.99), "USD"), "tracker.jpg", null),
                         Set.of(fitness, electronics)
                 ),
 
@@ -120,7 +122,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         17L,
                         "Bluetooth Speaker",
                         "Portable speaker with deep bass",
-                        new ProductVariant("Speaker Bass+", "Water-resistant, 10-hour battery life", 59.99, "speaker.jpg", null),
+                        new ProductVariant("Speaker Bass+", "Water-resistant, 10-hour battery life", new Price(new BigDecimal(59.99), "USD"), "speaker.jpg", null),
                         Set.of(accessories, electronics)
                 ),
 
@@ -128,7 +130,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         17L,
                         "Mechanical Gaming Keyboard",
                         "Tactile switches and RGB lighting",
-                        new ProductVariant("Keyboard RGB", "Customizable lighting", 89.99, "keyboard.jpg", null),
+                        new ProductVariant("Keyboard RGB", "Customizable lighting", new Price(new BigDecimal(89.99), "USD"), "keyboard.jpg", null),
                         Set.of(gaming, computers)
                 ),
 
@@ -136,7 +138,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         17L,
                         "Robot Vacuum Cleaner",
                         "Smart home cleaning solution",
-                        new ProductVariant("Vacuum AutoClean", "AI-powered navigation", 249.99, "vacuum.jpg", null),
+                        new ProductVariant("Vacuum AutoClean", "AI-powered navigation", new Price(new BigDecimal(249.99), "USD"), "vacuum.jpg", null),
                         Set.of(homeAppliances, electronics)
                 ),
 
@@ -144,7 +146,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         9L,
                         "Smartwatch Series 5",
                         "Advanced health tracking and notifications",
-                        new ProductVariant("Smartwatch Premium", "GPS & LTE model", 299.99, "watch.jpg", null),
+                        new ProductVariant("Smartwatch Premium", "GPS & LTE model", new Price(new BigDecimal(299.99), "USD"), "watch.jpg", null),
                         Set.of(fitness, mobilePhones)
                 ),
 
@@ -152,7 +154,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         9L,
                         "Gaming Headset",
                         "Surround sound with noise cancellation",
-                        new ProductVariant("Headset Pro", "7.1 surround sound", 149.99, "headset.jpg", null),
+                        new ProductVariant("Headset Pro", "7.1 surround sound", new Price(new BigDecimal(149.99), "USD"), "headset.jpg", null),
                         Set.of(gaming, accessories)
                 ),
 
@@ -160,7 +162,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         9L,
                         "DSLR Camera",
                         "Professional photography camera",
-                        new ProductVariant("Camera 24MP", "24MP sensor with 4K video", 799.99, "camera.jpg", null),
+                        new ProductVariant("Camera 24MP", "24MP sensor with 4K video", new Price(new BigDecimal(799.99), "USD"), "camera.jpg", null),
                         Set.of(electronics, accessories)
                 ),
 
@@ -168,7 +170,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         8L,
                         "Home Security Camera",
                         "Smart surveillance with motion detection",
-                        new ProductVariant("Security Cam", "1080p, night vision", 99.99, "securitycam.jpg", null),
+                        new ProductVariant("Security Cam", "1080p, night vision", new Price(new BigDecimal(99.99), "USD"), "securitycam.jpg", null),
                         Set.of(homeAppliances, electronics)
                 ),
 
@@ -176,7 +178,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         8L,
                         "Electric Scooter",
                         "Eco-friendly commuting solution",
-                        new ProductVariant("Scooter Max", "25-mile range, 15mph top speed", 399.99, "scooter.jpg", null),
+                        new ProductVariant("Scooter Max", "25-mile range, 15mph top speed", new Price(new BigDecimal(399.99), "USD"), "scooter.jpg", null),
                         Set.of(electronics, fitness)
                 ),
 
@@ -184,7 +186,7 @@ public class ProductContextDataSeeder implements CommandLineRunner {
                         17L,
                         "Portable Projector",
                         "Compact projector for movies and presentations",
-                        new ProductVariant("Projector Mini", "HD resolution, built-in speakers", 149.99, "projector.jpg", null),
+                        new ProductVariant("Projector Mini", "HD resolution, built-in speakers", new Price(new BigDecimal(149.99), "USD"), "projector.jpg", null),
                         Set.of(electronics, homeAppliances)
                 )
         );
@@ -192,17 +194,13 @@ public class ProductContextDataSeeder implements CommandLineRunner {
         for (Product product : products) {
             productVariants.add(product.getPrimaryVariant());
         }
-        productVariantRepository.saveAll(productVariants);
-        productRepository.saveAll(products);
 
-        productVariants.clear();
         for (Product product : products) {
             ProductVariant curProductVariant = product.getPrimaryVariant();
             curProductVariant.setProduct(product);
-            productVariants.add(product.getPrimaryVariant());
         }
 
-        productVariantRepository.saveAll(productVariants);
+        productRepository.saveAll(products);
     }
 
     private void seedProductVariants() {
@@ -214,64 +212,64 @@ public class ProductContextDataSeeder implements CommandLineRunner {
 
         List<ProductVariant> productVariants = Arrays.asList(
                 // Laptop Pro variants
-                new ProductVariant("Laptop Pro 8GB", "8GB RAM, 256GB SSD", 999.99, "laptop-8gb.jpg", productMap.get("Laptop Pro")),
-                new ProductVariant("Laptop Pro 32GB", "32GB RAM, 1TB SSD", 1399.99, "laptop-32gb.jpg", productMap.get("Laptop Pro")),
+                new ProductVariant("Laptop Pro 8GB", "8GB RAM, 256GB SSD", new Price(new BigDecimal(999.99), "USD"), "laptop-8gb.jpg", productMap.get("Laptop Pro")),
+                new ProductVariant("Laptop Pro 32GB", "32GB RAM, 1TB SSD", new Price(new BigDecimal(1399.99), "USD"), "laptop-32gb.jpg", productMap.get("Laptop Pro")),
 
                 // Smartphone X variants
-                new ProductVariant("Smartphone X 64GB", "64GB Storage, 4GB RAM", 599.99, "phone-64gb.jpg", productMap.get("Smartphone X")),
-                new ProductVariant("Smartphone X 256GB", "256GB Storage, 8GB RAM", 799.99, "phone-256gb.jpg", productMap.get("Smartphone X")),
+                new ProductVariant("Smartphone X 64GB", "64GB Storage, 4GB RAM", new Price(new BigDecimal(599.99), "USD"), "phone-64gb.jpg", productMap.get("Smartphone X")),
+                new ProductVariant("Smartphone X 256GB", "256GB Storage, 8GB RAM", new Price(new BigDecimal(799.99), "USD"), "phone-256gb.jpg", productMap.get("Smartphone X")),
 
                 // Gaming Mouse Ultra variants
-                new ProductVariant("Gaming Mouse RGB Elite", "RGB Lighting, Wireless", 89.99, "mouse-elite.jpg", productMap.get("Gaming Mouse Ultra")),
-                new ProductVariant("Gaming Mouse Pro", "Customizable buttons, Wired", 69.99, "mouse-pro.jpg", productMap.get("Gaming Mouse Ultra")),
+                new ProductVariant("Gaming Mouse RGB Elite", "RGB Lighting, Wireless", new Price(new BigDecimal(89.99), "USD"), "mouse-elite.jpg", productMap.get("Gaming Mouse Ultra")),
+                new ProductVariant("Gaming Mouse Pro", "Customizable buttons, Wired", new Price(new BigDecimal(69.99), "USD"), "mouse-pro.jpg", productMap.get("Gaming Mouse Ultra")),
 
                 // Wireless Earbuds Pro variants
-                new ProductVariant("Earbuds Pro Black", "Noise-canceling, Black edition", 129.99, "earbuds-black.jpg", productMap.get("Wireless Earbuds Pro")),
-                new ProductVariant("Earbuds Pro White", "Noise-canceling, White edition", 129.99, "earbuds-white.jpg", productMap.get("Wireless Earbuds Pro")),
+                new ProductVariant("Earbuds Pro Black", "Noise-canceling, Black edition", new Price(new BigDecimal(129.99), "USD"), "earbuds-black.jpg", productMap.get("Wireless Earbuds Pro")),
+                new ProductVariant("Earbuds Pro White", "Noise-canceling, White edition", new Price(new BigDecimal(129.99), "USD"), "earbuds-white.jpg", productMap.get("Wireless Earbuds Pro")),
 
                 // 4K Smart TV variants
-                new ProductVariant("Smart TV 65-inch", "Ultra HD, HDR10+ with Alexa", 799.99, "tv-65.jpg", productMap.get("4K Smart TV")),
-                new ProductVariant("Smart TV 75-inch", "Ultra HD, HDR10+ with Google Assistant", 999.99, "tv-75.jpg", productMap.get("4K Smart TV")),
+                new ProductVariant("Smart TV 65-inch", "Ultra HD, HDR10+ with Alexa", new Price(new BigDecimal(799.99), "USD"), "tv-65.jpg", productMap.get("4K Smart TV")),
+                new ProductVariant("Smart TV 75-inch", "Ultra HD, HDR10+ with Google Assistant", new Price(new BigDecimal(999.99), "USD"), "tv-75.jpg", productMap.get("4K Smart TV")),
 
                 // Fitness Tracker variants
-                new ProductVariant("Fitness Tracker Lite", "Basic heart rate monitoring", 49.99, "tracker-lite.jpg", productMap.get("Fitness Tracker")),
-                new ProductVariant("Fitness Tracker Advanced", "Advanced heart rate and sleep monitoring", 99.99, "tracker-advanced.jpg", productMap.get("Fitness Tracker")),
+                new ProductVariant("Fitness Tracker Lite", "Basic heart rate monitoring", new Price(new BigDecimal(49.99), "USD"), "tracker-lite.jpg", productMap.get("Fitness Tracker")),
+                new ProductVariant("Fitness Tracker Advanced", "Advanced heart rate and sleep monitoring", new Price(new BigDecimal(99.99), "USD"), "tracker-advanced.jpg", productMap.get("Fitness Tracker")),
 
                 // Bluetooth Speaker variants
-                new ProductVariant("Speaker Bass+ Pro", "Extended range, Deep Bass", 89.99, "speaker-pro.jpg", productMap.get("Bluetooth Speaker")),
-                new ProductVariant("Speaker Bass+ Mini", "Compact size, Deep Bass", 49.99, "speaker-mini.jpg", productMap.get("Bluetooth Speaker")),
+                new ProductVariant("Speaker Bass+ Pro", "Extended range, Deep Bass", new Price(new BigDecimal(89.99), "USD"), "speaker-pro.jpg", productMap.get("Bluetooth Speaker")),
+                new ProductVariant("Speaker Bass+ Mini", "Compact size, Deep Bass", new Price(new BigDecimal(49.99), "USD"), "speaker-mini.jpg", productMap.get("Bluetooth Speaker")),
 
                 // Mechanical Gaming Keyboard variants
-                new ProductVariant("Keyboard RGB Elite", "Tactile switches, Advanced RGB", 119.99, "keyboard-elite.jpg", productMap.get("Mechanical Gaming Keyboard")),
-                new ProductVariant("Keyboard RGB Compact", "Compact design, RGB", 69.99, "keyboard-compact.jpg", productMap.get("Mechanical Gaming Keyboard")),
+                new ProductVariant("Keyboard RGB Elite", "Tactile switches, Advanced RGB", new Price(new BigDecimal(119.99), "USD"), "keyboard-elite.jpg", productMap.get("Mechanical Gaming Keyboard")),
+                new ProductVariant("Keyboard RGB Compact", "Compact design, RGB", new Price(new BigDecimal(69.99), "USD"), "keyboard-compact.jpg", productMap.get("Mechanical Gaming Keyboard")),
 
                 // Robot Vacuum Cleaner variants
-                new ProductVariant("Vacuum AutoClean Max", "Enhanced suction power, Larger bin", 299.99, "vacuum-max.jpg", productMap.get("Robot Vacuum Cleaner")),
-                new ProductVariant("Vacuum AutoClean Mini", "Compact design, Standard suction", 199.99, "vacuum-mini.jpg", productMap.get("Robot Vacuum Cleaner")),
+                new ProductVariant("Vacuum AutoClean Max", "Enhanced suction power, Larger bin", new Price(new BigDecimal(299.99), "USD"), "vacuum-max.jpg", productMap.get("Robot Vacuum Cleaner")),
+                new ProductVariant("Vacuum AutoClean Mini", "Compact design, Standard suction", new Price(new BigDecimal(199.99), "USD"), "vacuum-mini.jpg", productMap.get("Robot Vacuum Cleaner")),
 
                 // Smartwatch Series 5 variants
-                new ProductVariant("Smartwatch Basic", "GPS, Standard model", 199.99, "watch-basic.jpg", productMap.get("Smartwatch Series 5")),
-                new ProductVariant("Smartwatch Sport", "GPS & LTE, Sport band", 349.99, "watch-sport.jpg", productMap.get("Smartwatch Series 5")),
+                new ProductVariant("Smartwatch Basic", "GPS, Standard model", new Price(new BigDecimal(199.99), "USD"), "watch-basic.jpg", productMap.get("Smartwatch Series 5")),
+                new ProductVariant("Smartwatch Sport", "GPS & LTE, Sport band", new Price(new BigDecimal(349.99), "USD"), "watch-sport.jpg", productMap.get("Smartwatch Series 5")),
 
                 // Gaming Headset variants
-                new ProductVariant("Headset Pro Wireless", "7.1 surround sound, Wireless", 179.99, "headset-wireless.jpg", productMap.get("Gaming Headset")),
-                new ProductVariant("Headset Pro Wired", "7.1 surround sound, Wired", 149.99, "headset-wired.jpg", productMap.get("Gaming Headset")),
+                new ProductVariant("Headset Pro Wireless", "7.1 surround sound, Wireless", new Price(new BigDecimal(179.99), "USD"), "headset-wireless.jpg", productMap.get("Gaming Headset")),
+                new ProductVariant("Headset Pro Wired", "7.1 surround sound, Wired", new Price(new BigDecimal(149.99), "USD"), "headset-wired.jpg", productMap.get("Gaming Headset")),
 
                 // DSLR Camera variants
-                new ProductVariant("Camera 18MP", "18MP sensor with Full HD video", 699.99, "camera-18mp.jpg", productMap.get("DSLR Camera")),
-                new ProductVariant("Camera 32MP", "32MP sensor with 4K video", 999.99, "camera-32mp.jpg", productMap.get("DSLR Camera")),
+                new ProductVariant("Camera 18MP", "18MP sensor with Full HD video", new Price(new BigDecimal(699.99), "USD"), "camera-18mp.jpg", productMap.get("DSLR Camera")),
+                new ProductVariant("Camera 32MP", "32MP sensor with 4K video", new Price(new BigDecimal(999.99), "USD"), "camera-32mp.jpg", productMap.get("DSLR Camera")),
 
                 // Home Security Camera variants
-                new ProductVariant("Security Cam Wireless", "Wireless, Night Vision", 149.99, "securitycam-wireless.jpg", productMap.get("Home Security Camera")),
-                new ProductVariant("Security Cam Wired", "Wired, 4K video", 199.99, "securitycam-wired.jpg", productMap.get("Home Security Camera")),
+                new ProductVariant("Security Cam Wireless", "Wireless, Night Vision", new Price(new BigDecimal(149.99), "USD"), "securitycam-wireless.jpg", productMap.get("Home Security Camera")),
+                new ProductVariant("Security Cam Wired", "Wired, 4K video", new Price(new BigDecimal(199.99), "USD"), "securitycam-wired.jpg", productMap.get("Home Security Camera")),
 
                 // Electric Scooter variants
-                new ProductVariant("Scooter Max Pro", "30-mile range, 18mph top speed", 499.99, "scooter-pro.jpg", productMap.get("Electric Scooter")),
-                new ProductVariant("Scooter Mini", "15-mile range, 12mph top speed", 299.99, "scooter-mini.jpg", productMap.get("Electric Scooter")),
+                new ProductVariant("Scooter Max Pro", "30-mile range, 18mph top speed", new Price(new BigDecimal(499.99), "USD"), "scooter-pro.jpg", productMap.get("Electric Scooter")),
+                new ProductVariant("Scooter Mini", "15-mile range, 12mph top speed", new Price(new BigDecimal(299.99), "USD"), "scooter-mini.jpg", productMap.get("Electric Scooter")),
 
                 // Portable Projector variants
-                new ProductVariant("Projector Mini Plus", "Full HD, Longer battery", 179.99, "projector-plus.jpg", productMap.get("Portable Projector")),
-                new ProductVariant("Projector Ultra", "4K resolution, Larger screen", 299.99, "projector-ultra.jpg", productMap.get("Portable Projector"))
+                new ProductVariant("Projector Mini Plus", "Full HD, Longer battery", new Price(new BigDecimal(179.99), "USD"), "projector-plus.jpg", productMap.get("Portable Projector")),
+                new ProductVariant("Projector Ultra", "4K resolution, Larger screen", new Price(new BigDecimal(299.99), "USD"), "projector-ultra.jpg", productMap.get("Portable Projector"))
         );
 
         // Save all product variants

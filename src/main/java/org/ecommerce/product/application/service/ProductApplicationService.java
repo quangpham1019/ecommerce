@@ -2,6 +2,7 @@ package org.ecommerce.product.application.service;
 
 import jakarta.transaction.Transactional;
 import org.ecommerce.product.application.dto.ListProductDetailsDTO;
+import org.ecommerce.product.application.dto.ProductCreateDTO;
 import org.ecommerce.product.application.dto.ProductDetailsDTO;
 import org.ecommerce.product.application.dto.ProductVariantDetailsDTO;
 import org.ecommerce.product.application.mapper.interfaces.ProductMapper;
@@ -13,8 +14,11 @@ import org.ecommerce.product.infrastructure.repository.jpa.ProductRepository;
 import org.ecommerce.product.infrastructure.repository.jpa.ProductVariantRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductApplicationService {
@@ -56,14 +60,14 @@ public class ProductApplicationService {
 
         if (product.isEmpty()) throw new IllegalArgumentException("Product not found");
 
-        ProductDetailsDTO productDetailsDTO = productMapper.toProductDetailsDTO(product.get().getPrimaryVariant());
+        ProductDetailsDTO productDetailsDTO = productMapper.toProductDetailsDTO(product.get());
         List<ProductVariant> associatedProductVariants = productVariantRepository.findByProductId(productId);
-        List<ProductVariantDetailsDTO> productVariantDetailsDTOList = associatedProductVariants
+        Set<ProductVariantDetailsDTO> productVariantDetailsDTOsSet = associatedProductVariants
                 .stream()
                 .map(productMapper::toProductVariantDetailsDTO)
-                .toList();
+                .collect(Collectors.toSet());
 
-        productDetailsDTO.setProductVariants(productVariantDetailsDTOList);
+        productDetailsDTO.setProductVariants(productVariantDetailsDTOsSet);
         productDetailsDTO.setCategories(product.get().getCategories());
 
         return productDetailsDTO;
@@ -75,6 +79,21 @@ public class ProductApplicationService {
         if (productVariant.isEmpty()) throw new IllegalArgumentException("Product not found");
 
         return productMapper.toProductVariantDetailsDTO(productVariant.get());
+    }
+
+    public ProductDetailsDTO createProduct(ProductCreateDTO productCreateDTO) {
+
+        Product product = productMapper.toProduct(productCreateDTO);
+        product.getPrimaryVariant().setProduct(product);
+        product.getProductVariants().add(product.getPrimaryVariant());
+
+        Set<Category> categories = new HashSet<>(categoryRepository
+                .findAllById(productCreateDTO.getCategories()));
+
+        product.setCategories(categories);
+
+        return productMapper.toProductDetailsDTO(productRepository.save(product));
+
     }
 
 

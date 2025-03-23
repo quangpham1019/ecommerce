@@ -3,6 +3,7 @@ package org.ecommerce.product.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.ecommerce.product.domain.model.value_objects.Price;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
@@ -23,7 +24,9 @@ public class ProductVariant {
     private String productVariantName;
     private String productVariantDescription;
 
-    private double price;
+    @Embedded
+    private Price price;
+
     private String imageUrl;
 
     @ManyToOne
@@ -40,7 +43,7 @@ public class ProductVariant {
     @ToString.Exclude
     private Set<ProductReview> productReviews;
 
-    public ProductVariant(String productVariantName, String productVariantDescription, double price, String imageUrl, Product product) {
+    public ProductVariant(String productVariantName, String productVariantDescription, Price price, String imageUrl, Product product) {
         this.productVariantName = productVariantName;
         this.productVariantDescription = productVariantDescription;
         this.price = price;

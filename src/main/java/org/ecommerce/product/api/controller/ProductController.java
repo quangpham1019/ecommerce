@@ -1,42 +1,34 @@
 package org.ecommerce.product.api.controller;
 
+import jakarta.validation.Valid;
 import org.ecommerce.product.application.dto.ListProductDetailsDTO;
+import org.ecommerce.product.application.dto.ProductCreateDTO;
 import org.ecommerce.product.application.dto.ProductDetailsDTO;
 import org.ecommerce.product.application.service.ProductApplicationService;
-import org.ecommerce.product.domain.model.Product;
-import org.ecommerce.user.application.service.UserApplicationService;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductApplicationService productApplicationService;
-    private final UserApplicationService userApplicationService;
+    String ROLE_ANONYMOUS = "ROLE_ANONYMOUS";
+    String ROLE_BUYER = "ROLE_BUYER";
 
-    public ProductController(ProductApplicationService productApplicationService, UserApplicationService userApplicationService) {
+    private final ProductApplicationService productApplicationService;
+
+    public ProductController(ProductApplicationService productApplicationService) {
         this.productApplicationService = productApplicationService;
-        this.userApplicationService = userApplicationService;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasAnyAuthority('MANAGE_PRODUCTS')")
     @GetMapping
-    public List<ListProductDetailsDTO> getProducts(@AuthenticationPrincipal User user) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null) {
+    public List<ListProductDetailsDTO> getProducts() {
+        if (hasAuthority(ROLE_ANONYMOUS) || hasAuthority(ROLE_BUYER)) {
             return productApplicationService.getProducts();
         }
 
@@ -44,9 +36,21 @@ public class ProductController {
         return productApplicationService.getProductsBySellerId(5L);
     }
 
-    @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping("/{productId}")
     public ProductDetailsDTO getProductDetailsById(@PathVariable Long productId) {
         return productApplicationService.getProductDetailsById(productId);
+    }
+
+    @PostMapping
+    public ResponseEntity<ProductDetailsDTO> createProduct(@Valid @RequestBody ProductCreateDTO productCreateDTO) {
+        return ResponseEntity.ok(productApplicationService.createProduct(productCreateDTO));
+    }
+
+    boolean hasAuthority(String authority) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(authority))) {
+            return true;
+        }
+        return false;
     }
 }

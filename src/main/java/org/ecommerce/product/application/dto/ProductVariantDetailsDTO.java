@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ecommerce.product.domain.model.value_objects.Price;
 
 @Getter
 @Setter
@@ -13,7 +14,7 @@ public class ProductVariantDetailsDTO {
     private String name;
     private String description;
     private String imageUrl;
-    private double price;
+    private Price price;
 //    private Inventory inventory;
 
 }

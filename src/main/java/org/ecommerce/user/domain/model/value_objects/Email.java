@@ -9,7 +9,6 @@ import org.ecommerce.user.domain.exception.InvalidEmailException;
 import java.util.regex.Pattern;
 
 @Embeddable
-@NoArgsConstructor
 @Getter
 @EqualsAndHashCode
 @ToString
@@ -20,7 +19,11 @@ public class Email {
     @Column(name = "email_address", unique = true)
     // Jackson will treat the getter of this field as the entire JSON representation of the Email object when serializing it.
     @JsonValue
-    private String address;
+    private final String address;
+
+    public Email() {
+        address = null;
+    }
 
     public Email(String address) {
         isValidEmail(address);

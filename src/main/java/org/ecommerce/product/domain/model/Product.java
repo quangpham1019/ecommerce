@@ -27,16 +27,16 @@ public class Product {
 
     private Long sellerId;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "primary_variant_id", unique = true)
     @JsonIgnore
     @ToString.Exclude
     private ProductVariant primaryVariant;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @ToString.Exclude
-    private Set<ProductVariant> productVariants;
+    private Set<ProductVariant> productVariants = new HashSet<>();
 
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
@@ -44,7 +44,7 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
 
     public Product(Long sellerId, String name, String description, ProductVariant primaryVariant,  Set<Category> categories) {
