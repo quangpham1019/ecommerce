@@ -54,9 +54,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             String token = authHeader.substring(7);
-            String username = jwtUtil.extractUsername(token);
+            Long userId = jwtUtil.extractUserId(token);
 
-            if (username != null) {
+            if (userId != null) {
 
                 List<GrantedAuthority> authorities = new ArrayList<>(jwtUtil
                         .extractAuthorities(token)
@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .toList());
 
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(username, null, authorities);
+                        new UsernamePasswordAuthenticationToken(userId, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
             }

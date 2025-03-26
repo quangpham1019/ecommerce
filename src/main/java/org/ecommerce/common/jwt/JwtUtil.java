@@ -56,8 +56,11 @@ public class JwtUtil {
      * @param token The JWT token.
      * @return The username extracted from the JWT.
      */
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public Long extractUserId(String token) {
+        return extractClaim(
+                token,
+                claims -> Long.parseLong(claims.get("sub", String.class))
+        );
     }
 
     /**
@@ -116,11 +119,11 @@ public class JwtUtil {
      * and if the token is not expired.
      *
      * @param token The JWT token.
-     * @param username The username to check against the one in the token.
+     * @param userId The username to check against the one in the token.
      * @return true if the token is valid (username matches and token is not expired), false otherwise.
      */
-    public boolean isTokenValid(String token, String username) {
-        return extractUsername(token).equals(username) && !isTokenExpired(token);
+    public boolean isTokenValid(String token, Long userId) {
+        return extractUserId(token).equals(userId) && !isTokenExpired(token);
     }
 
     /**

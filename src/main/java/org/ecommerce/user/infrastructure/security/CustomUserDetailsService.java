@@ -52,7 +52,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toSet())
                 .toArray(String[]::new);
 
-        return User.withUsername(user.get().getEmail().getAddress()) // Use email as username
+        return User.withUsername(user.get().getId().toString()) // Use userId as username
                 .password(user.get().getPassword()) // Assume password is already hashed
 //                .roles(roleNames)         // get overridden by .authorities(), Spring use GRANTED_AUTHORITIES for both roles and authorities
                 .authorities(ArrayUtils.addAll(permissionList, roleList))

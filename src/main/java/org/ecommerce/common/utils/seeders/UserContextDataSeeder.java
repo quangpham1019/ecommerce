@@ -89,7 +89,8 @@ public class UserContextDataSeeder implements CommandLineRunner {
             roleRepository.saveAll(Arrays.asList(
                     new Role("ADMIN", "Administrator role with all permissions"),
                     new Role("USER", "User role with standard permissions"),
-                    new Role("MODERATOR", "Moderator role with limited permissions")
+                    new Role("MODERATOR", "Moderator role with limited permissions"),
+                    new Role("SELLER", "Seller role")
             ));
         }
     }
@@ -214,6 +215,7 @@ public class UserContextDataSeeder implements CommandLineRunner {
             Role adminRole = roles.get(0); // ADMIN
             Role userRole = roles.get(1);  // USER
             Role moderatorRole = roles.get(2); // MODERATOR
+            Role sellerRole = roles.get(3);
 
             // User 1: All roles active (ADMIN, USER, MODERATOR)
             userRoles.add(new UserRole(users.get(0), adminRole, UserRoleStatus.ACTIVE));  // User 1, ADMIN
@@ -233,6 +235,7 @@ public class UserContextDataSeeder implements CommandLineRunner {
 
             // User 5: 1 active role (USER)
             userRoles.add(new UserRole(users.get(4), userRole, UserRoleStatus.ACTIVE));   // User 5, USER
+            userRoles.add(new UserRole(users.get(4), sellerRole, UserRoleStatus.ACTIVE));   // User 5, SELLER
 
             // User 6: 1 active role (USER), 1 pending role (MODERATOR)
             userRoles.add(new UserRole(users.get(5), userRole, UserRoleStatus.ACTIVE));   // User 6, USER
@@ -243,13 +246,16 @@ public class UserContextDataSeeder implements CommandLineRunner {
 
             // User 8: 1 active role (USER)
             userRoles.add(new UserRole(users.get(7), userRole, UserRoleStatus.ACTIVE));   // User 8, USER
+            userRoles.add(new UserRole(users.get(7), sellerRole, UserRoleStatus.ACTIVE));   // User 8, SELLER
 
             // User 9: 1 active role (USER), 1 pending role (MODERATOR)
             userRoles.add(new UserRole(users.get(8), userRole, UserRoleStatus.ACTIVE));   // User 9, USER
             userRoles.add(new UserRole(users.get(8), moderatorRole, UserRoleStatus.PENDING)); // User 9, MODERATOR
+            userRoles.add(new UserRole(users.get(8), sellerRole, UserRoleStatus.ACTIVE));   // User 9, SELLER
 
             // User 10: 1 active role (USER)
             userRoles.add(new UserRole(users.get(9), userRole, UserRoleStatus.ACTIVE));   // User 10, USER
+            userRoles.add(new UserRole(users.get(9), sellerRole, UserRoleStatus.ACTIVE));   // User 10, SELLER
 
             // User 11: 1 active role (USER)
             userRoles.add(new UserRole(users.get(10), userRole, UserRoleStatus.ACTIVE));  // User 11, USER
@@ -275,6 +281,7 @@ public class UserContextDataSeeder implements CommandLineRunner {
             // User 17: 1 active role (USER), 1 active role (MODERATOR)
             userRoles.add(new UserRole(users.get(16), userRole, UserRoleStatus.ACTIVE));  // User 17, USER
             userRoles.add(new UserRole(users.get(16), moderatorRole, UserRoleStatus.ACTIVE)); // User 17, MODERATOR
+            userRoles.add(new UserRole(users.get(16), sellerRole, UserRoleStatus.ACTIVE));   // User 17, SELLER
 
             // User 18: 1 active role (USER)
             userRoles.add(new UserRole(users.get(17), userRole, UserRoleStatus.ACTIVE));  // User 18, USER

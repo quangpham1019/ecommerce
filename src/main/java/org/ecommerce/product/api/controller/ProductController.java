@@ -5,8 +5,13 @@ import org.ecommerce.product.application.dto.ListProductDetailsDTO;
 import org.ecommerce.product.application.dto.ProductCreateDTO;
 import org.ecommerce.product.application.dto.ProductDetailsDTO;
 import org.ecommerce.product.application.service.ProductApplicationService;
+import org.ecommerce.user.domain.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +22,9 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    String ROLE_ANONYMOUS = "ROLE_ANONYMOUS";
-    String ROLE_BUYER = "ROLE_BUYER";
+    private String ROLE_ANONYMOUS = "ROLE_ANONYMOUS";
+    private String ROLE_BUYER = "ROLE_BUYER";
+    private String ROLE_SELLER = "ROLE_SELLER";
 
     private final ProductApplicationService productApplicationService;
 
@@ -28,12 +34,13 @@ public class ProductController {
 
     @GetMapping
     public List<ListProductDetailsDTO> getProducts() {
-        if (hasAuthority(ROLE_ANONYMOUS) || hasAuthority(ROLE_BUYER)) {
-            return productApplicationService.getProducts();
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-//        Long sellerId = userApplicationService.getUser
-        return productApplicationService.getProductsBySellerId(5L);
+        if (hasAuthority(ROLE_SELLER, authentication)) {
+            Long userId = (Long) authentication.getPrincipal();
+            return productApplicationService.getProductsBySellerId(userId);
+        }
+        return productApplicationService.getProducts();
     }
 
     @GetMapping("/{productId}")
@@ -46,11 +53,7 @@ public class ProductController {
         return ResponseEntity.ok(productApplicationService.createProduct(productCreateDTO));
     }
 
-    boolean hasAuthority(String authority) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(authority))) {
-            return true;
-        }
-        return false;
+    boolean hasAuthority(String authority, Authentication authentication) {
+        return authentication.getAuthorities().contains(new SimpleGrantedAuthority(authority));
     }
 }
