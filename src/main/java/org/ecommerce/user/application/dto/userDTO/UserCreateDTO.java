@@ -3,7 +3,6 @@ package org.ecommerce.user.application.dto.userDTO;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.ecommerce.user.domain.model.value_objects.Email;
-import org.ecommerce.user.infrastructure.validation.ValidEmail;
 
 @Getter
 @Setter
@@ -21,7 +20,7 @@ public class UserCreateDTO {
             message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
     private String password;
 
-    @ValidEmail
+    @NotBlank
     private String email;
 
     public Email getEmail() {

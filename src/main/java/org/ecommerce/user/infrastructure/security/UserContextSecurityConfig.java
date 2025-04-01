@@ -50,7 +50,7 @@ public class UserContextSecurityConfig {
                 )
                 .formLogin(form -> form
                         .successHandler(jwtAuthenticationSuccessHandler)
-//                        .defaultSuccessUrl("/api/users", true)  // Redirect after login
+//                        .defaultSuccessUrl("/swagger-ui/index.html#/", true)  // Redirect after login
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -59,7 +59,7 @@ public class UserContextSecurityConfig {
                         .deleteCookies("JSESSIONID")
                 )
                 .requestCache(RequestCacheConfigurer::disable)  // Disable request cache (if not required)
-                .csrf(Customizer.withDefaults()) // Enable CSRF protection for session-based auth
+                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable()) // Enable CSRF protection for session-based auth
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource())) // Enable CORS
                 .build();
     }
