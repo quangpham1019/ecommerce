@@ -5,13 +5,9 @@ import org.ecommerce.product.application.dto.ListProductDetailsDTO;
 import org.ecommerce.product.application.dto.ProductCreateDTO;
 import org.ecommerce.product.application.dto.ProductDetailsDTO;
 import org.ecommerce.product.application.service.ProductApplicationService;
-import org.ecommerce.user.domain.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +28,7 @@ public class ProductController {
         this.productApplicationService = productApplicationService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER', 'BUYER')")
     @GetMapping
     public List<ListProductDetailsDTO> getProducts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -48,6 +45,7 @@ public class ProductController {
         return productApplicationService.getProductDetailsById(productId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
     @PostMapping
     public ResponseEntity<ProductDetailsDTO> createProduct(@Valid @RequestBody ProductCreateDTO productCreateDTO) {
         return ResponseEntity.ok(productApplicationService.createProduct(productCreateDTO));

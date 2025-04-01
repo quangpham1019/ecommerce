@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
@@ -25,14 +26,14 @@ public class UserContextSecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final CorsConfig corsConfig;
-    private final JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler;
+    private final CustomSuccessHandler customSuccessHandler;
 
     public UserContextSecurityConfig(UserDetailsService userDetailsService,
                                      CorsConfig corsConfig,
-                                     JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler) {
+                                     CustomSuccessHandler customSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.corsConfig = corsConfig;
-        this.jwtAuthenticationSuccessHandler = jwtAuthenticationSuccessHandler;
+        this.customSuccessHandler = customSuccessHandler;
     }
 
     @Bean(name = "userContextResources")
@@ -49,7 +50,7 @@ public class UserContextSecurityConfig {
                         .expiredUrl("/login") // Optional: redirect on session expiration
                 )
                 .formLogin(form -> form
-                        .successHandler(jwtAuthenticationSuccessHandler)
+                        .successHandler(customSuccessHandler)
 //                        .defaultSuccessUrl("/swagger-ui/index.html#/", true)  // Redirect after login
                 )
                 .logout(logout -> logout
@@ -59,7 +60,9 @@ public class UserContextSecurityConfig {
                         .deleteCookies("JSESSIONID")
                 )
                 .requestCache(RequestCacheConfigurer::disable)  // Disable request cache (if not required)
-                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable()) // Enable CSRF protection for session-based auth
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())) // Enable CSRF protection for session-based auth
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource())) // Enable CORS
                 .build();
     }
