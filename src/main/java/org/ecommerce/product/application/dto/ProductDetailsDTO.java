@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ecommerce.product.domain.model.Category;
-import org.ecommerce.product.domain.model.ProductVariant;
-import org.ecommerce.product.domain.model.value_objects.Price;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter

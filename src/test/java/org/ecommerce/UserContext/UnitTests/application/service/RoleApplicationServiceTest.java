@@ -1,4 +1,4 @@
-package org.ecommerce.UnitTests.service;
+package org.ecommerce.UserContext.UnitTests.application.service;
 
 import org.ecommerce.user.application.service.RoleApplicationService;
 import org.ecommerce.user.domain.model.Role;

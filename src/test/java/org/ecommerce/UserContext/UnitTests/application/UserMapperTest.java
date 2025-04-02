@@ -1,4 +1,4 @@
-package org.ecommerce.UnitTests.application;
+package org.ecommerce.UserContext.UnitTests.application;
 
 import org.ecommerce.user.application.dto.userDTO.UserCreateDTO;
 import org.ecommerce.user.application.dto.userDTO.UserProfileDTO;

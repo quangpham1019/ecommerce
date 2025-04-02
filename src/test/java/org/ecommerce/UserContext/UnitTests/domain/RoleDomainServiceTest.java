@@ -1,4 +1,4 @@
-package org.ecommerce.UnitTests.domain;
+package org.ecommerce.UserContext.UnitTests.domain;
 import org.ecommerce.user.domain.service.RoleDomainService;
 import org.ecommerce.user.infrastructure.repository.jpa.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;

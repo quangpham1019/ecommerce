@@ -1,4 +1,4 @@
-package org.ecommerce.UnitTests.domain;
+package org.ecommerce.UserContext.UnitTests.domain;
 
 import org.ecommerce.user.domain.model.User;
 import org.ecommerce.user.domain.model.value_objects.Email;

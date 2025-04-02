@@ -83,7 +83,15 @@ public class ProductApplicationService {
 
     public ProductDetailsDTO createProduct(ProductCreateDTO productCreateDTO) {
 
+        if (productRepository.existsByNameAndSellerIdAndCategoryIds(
+                productCreateDTO.getName(),
+                productCreateDTO.getSellerId(),
+                productCreateDTO.getCategories())) {
+            throw new IllegalArgumentException("Product already exists");
+        }
+
         Product product = productMapper.toProduct(productCreateDTO);
+
         product.getPrimaryVariant().setProduct(product);
         product.getProductVariants().add(product.getPrimaryVariant());
 

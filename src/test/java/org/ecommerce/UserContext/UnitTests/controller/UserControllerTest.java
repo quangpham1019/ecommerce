@@ -1,4 +1,4 @@
-package org.ecommerce.UnitTests.controller;
+package org.ecommerce.UserContext.UnitTests.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ecommerce.Config.TestSecurityConfig;

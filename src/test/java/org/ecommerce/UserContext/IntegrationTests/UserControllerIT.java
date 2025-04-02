@@ -1,4 +1,4 @@
-package org.ecommerce.IntegrationTests;
+package org.ecommerce.UserContext.IntegrationTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
