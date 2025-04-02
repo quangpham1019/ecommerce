@@ -9,6 +9,7 @@ import org.ecommerce.product.domain.model.Product;
 import org.hibernate.validator.constraints.Currency;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -32,4 +33,17 @@ public class ProductVariantCreateDTO {
 
         @NotNull(message = "Product variant must be associated with a product")
         private Product product;
+
+        @Override
+        public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                ProductVariantCreateDTO that = (ProductVariantCreateDTO) o;
+                return Objects.equals(productVariantName, that.productVariantName) && Objects.equals(productVariantDescription, that.productVariantDescription) && Objects.equals(price, that.price) && Objects.equals(currency, that.currency) && Objects.equals(imageUrl, that.imageUrl) && Objects.equals(product, that.product);
+        }
+
+        @Override
+        public int hashCode() {
+                return Objects.hash(productVariantName, productVariantDescription, price, currency, imageUrl, product);
+        }
 }

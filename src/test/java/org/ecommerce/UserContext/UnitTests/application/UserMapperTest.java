@@ -32,21 +32,27 @@ public class UserMapperTest {
     @Test
     void toResponseDto_ShouldMapUserToUserResponseDto() {
         // Arrange
-        User user = new User("john_doe", "password123", new Email("john.doe@example.com"));
+        User expected = new User(
+                "john_doe",
+                "password123",
+                new Email("john.doe@example.com"));
 
         // Act
-        UserResponseDTO responseDTO = userMapper.toResponseDto(user);
+        UserResponseDTO actual = userMapper.toResponseDto(expected);
 
         // Assert
-        assertNotNull(responseDTO);
-        assertEquals(user.getUsername(), responseDTO.getUsername());
-        assertEquals(user.getEmail().getAddress(), responseDTO.getEmail());
+        assertNotNull(actual);
+        assertEquals(expected.getUsername(), actual.getUsername());
+        assertEquals(expected.getEmail().getAddress(), actual.getEmail());
     }
 
     @Test
     void toEntity_ShouldMapUserCreateDTOToUserEntity() {
         // Arrange
-        UserCreateDTO dto = new UserCreateDTO("john_doe", "password123", "john.doe@example.com");
+        UserCreateDTO dto = new UserCreateDTO(
+                "john_doe",
+                "password123",
+                "john.doe@example.com");
 
         // Act
         User user = userMapper.toEntity(dto);
@@ -60,8 +66,13 @@ public class UserMapperTest {
     @Test
     void toUserProfileDTO_ShouldMapUserToUserProfileDTO() {
         // Arrange
-        User user = new User("john_doe", "password123", new Email("john.doe@example.com"));
-        Role role = new Role("ADMIN", "Admin tasks");
+        User user = new User(
+                "john_doe",
+                "password123",
+                new Email("john.doe@example.com"));
+        Role role = new Role(
+                "ADMIN",
+                "Admin tasks");
 
         Set<UserRole> userRoles = new HashSet<>();
         UserRole existingRoles = new UserRole(user, role, UserRoleStatus.ACTIVE);
@@ -79,7 +90,18 @@ public class UserMapperTest {
     @Test
     void mapUserRolesToRoleNames_ShouldMapUserRolesToRoleNames() {
         // Arrange
-        Set<UserRole> roles = Set.of(new UserRole(new User("john_doe", "password123", new Email("john.doe@example.com")), new Role("ADMIN", "Admin tasks"), UserRoleStatus.ACTIVE));
+        Set<UserRole> roles = Set.of(new UserRole(
+                new User(
+                        "john_doe",
+                        "password123",
+                        new Email("john.doe@example.com")
+                ),
+                new Role(
+                        "ADMIN",
+                        "Admin tasks"
+                ),
+                UserRoleStatus.ACTIVE)
+        );
 
         // Act
         List<String> roleNames = userMapper.mapUserRolesToRoleNames(roles);

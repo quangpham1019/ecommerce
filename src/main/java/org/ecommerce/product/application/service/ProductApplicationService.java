@@ -61,14 +61,16 @@ public class ProductApplicationService {
         if (product.isEmpty()) throw new IllegalArgumentException("Product not found");
 
         ProductDetailsDTO productDetailsDTO = productMapper.toProductDetailsDTO(product.get());
-        List<ProductVariant> associatedProductVariants = productVariantRepository.findByProductId(productId);
+//        List<ProductVariant> associatedProductVariants = productVariantRepository.findByProductId(productId);
+        Set<ProductVariant> associatedProductVariants = product.get().getProductVariants();
+
         Set<ProductVariantDetailsDTO> productVariantDetailsDTOsSet = associatedProductVariants
                 .stream()
                 .map(productMapper::toProductVariantDetailsDTO)
                 .collect(Collectors.toSet());
 
         productDetailsDTO.setProductVariants(productVariantDetailsDTOsSet);
-        productDetailsDTO.setCategories(product.get().getCategories());
+//        productDetailsDTO.setCategories(product.get().getCategories());
 
         return productDetailsDTO;
     }

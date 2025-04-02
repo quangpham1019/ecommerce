@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,8 +43,10 @@ public class ProductApplicationServiceTest {
     @InjectMocks
     private ProductApplicationService productApplicationService;
 
+
     @BeforeEach
-    public void setUp() {}
+    public void setUp() {
+    }
 
     @Test
     void getProducts_ShouldReturnAllProducts() {}
@@ -54,9 +57,94 @@ public class ProductApplicationServiceTest {
     void getProductsBySellerId_ShouldReturnEmptyList_WhenUserIdDoesNotExist() {}
 
     @Test
-    void getProductDetailsById_ShouldReturnProductDetails_WhenProductExists() {}
+    void getProductDetailsById_ShouldReturnProductDetails_WhenProductExists() {
+        // Arrange
+        Long productId = 1L;
+        ProductVariant primaryVariant = null;
+
+        Product product = new Product(
+                1L,
+                "product name",
+                "product description",
+                primaryVariant,
+                Set.of(new Category(
+                        "Category name",
+                        "Category description"
+                ))
+        );
+        primaryVariant = new ProductVariant(
+                "primary variant","",null,"", product
+        );
+        ProductVariant anotherVariant = new ProductVariant(
+                "another variant","", null,"", product
+        );
+        product.setProductVariants(Set.of(primaryVariant, anotherVariant));
+
+        ProductVariantDetailsDTO primaryVariantDetailsDTO = new ProductVariantDetailsDTO(
+                "primary variant","","",null
+        );
+        ProductVariantDetailsDTO anotherVariantDetailsDTO = new ProductVariantDetailsDTO(
+                "another variant","","",null
+        );
+
+        ProductDetailsDTO productDetailsDTO = new ProductDetailsDTO(
+                product.getName(),
+                product.getDescription(),
+                null,
+                product.getCategories()
+        );
+
+        ProductDetailsDTO expected = new ProductDetailsDTO(
+                "product name",
+                "product description",
+                Set.of(
+                        new ProductVariantDetailsDTO(
+                        "primary variant","","",null
+                        ),
+                        new ProductVariantDetailsDTO(
+                        "another variant","","",null
+                        )
+                ),
+                Set.of(new Category(
+                        "Category name",
+                        "Category description"
+                ))
+        );
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(productMapper.toProductDetailsDTO(product)).thenReturn(productDetailsDTO);
+        when(productMapper.toProductVariantDetailsDTO(primaryVariant)).thenReturn(primaryVariantDetailsDTO);
+        when(productMapper.toProductVariantDetailsDTO(anotherVariant)).thenReturn(anotherVariantDetailsDTO);
+
+        // Act
+        ProductDetailsDTO actual = productApplicationService.getProductDetailsById(productId);
+
+        // Assert
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+        verify(productRepository).findById(productId);
+        verify(productMapper).toProductDetailsDTO(product);
+        verify(productMapper).toProductVariantDetailsDTO(primaryVariant);
+        verify(productMapper).toProductVariantDetailsDTO(anotherVariant);
+        verifyNoMoreInteractions(productRepository, productMapper);
+
+    }
     @Test
-    void getProductsBySellerId_ShouldThrowException_WhenProductDoesNotExist() {}
+    void getProductDetailsById_ShouldThrowException_WhenProductDoesNotExist() {
+        // Arrange
+        Long productId = 1L;
+        when(productRepository.findById(productId)).thenReturn(Optional.empty());
+
+        // Act
+        Exception exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> productApplicationService.getProductDetailsById(productId));
+
+        // Assert
+        assertEquals("Product not found", exception.getMessage());
+        verify(productRepository, times(1)).findById(productId);
+        verifyNoMoreInteractions(productMapper);
+        verifyNoMoreInteractions(productVariantRepository);
+    }
 
     @Test
     void createProduct_ShouldThrowException_WhenProductIsDuplicateByNameAndSellerIdAndCategories() {
