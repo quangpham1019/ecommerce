@@ -10,6 +10,9 @@ This project aim to develop a backend service for an ecommerce platform similar 
 - Install Docker.
 - Clone the repository.
 - Open terminal at the project root.
+- Run command "docker build -t ecommerce ." to:
+  - Build JAR file within docker container, and 
+  - Create a docker image of Ecommerce app.
 - Run command "docker compose up", which do the followings:
   - Create a container for MySQL database at port 3307:3306 (to prevent potential conflict with any local db server).
   - Create a container for Ecommerce app with corresponding database environment variables.
