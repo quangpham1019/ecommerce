@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/csrf")
 public class CsrfController {
 
-    @PostMapping
+    @PostMapping(name = "getCsrf")
     @ResponseStatus(HttpStatus.OK)
-    public void CsrfToken(){
+    public void csrfToken(){
     }
 }

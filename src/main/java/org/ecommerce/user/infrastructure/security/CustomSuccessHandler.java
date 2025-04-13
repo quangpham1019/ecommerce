@@ -5,6 +5,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.ecommerce.common.jwt.JwtUtil;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
@@ -25,9 +26,11 @@ import java.util.Optional;
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
+    private final Environment environment;
 
-    public CustomSuccessHandler(JwtUtil jwtUtil) {
+    public CustomSuccessHandler(JwtUtil jwtUtil, Environment environment) {
         this.jwtUtil = jwtUtil;
+        this.environment = environment;
     }
 
     /***
@@ -71,8 +74,9 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         RestTemplate restTemplate = getRestTemplate();
 
-        // Send POST request
-        String url = "http://localhost:8081/api/v1/csrf";
+//         Send POST request
+        String url = String.format("http://localhost:%s/api/v1/csrf", environment.getProperty("server.port"));
+
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, null, String.class);
 
         for (String cookie : Objects.requireNonNull(responseEntity.getHeaders().get("Set-Cookie"))) {

@@ -4,20 +4,47 @@ This project aim to develop a backend service for an ecommerce platform similar 
 
 
 <details>
+    <summary><strong style="font-size: 2.5em;">Run app with Docker</strong></summary>
+
+## **Setup**
+- Install Docker.
+- Clone the repository.
+- Open terminal at the project root.
+- Run command "docker compose up", which do the followings:
+  - Create a container for MySQL database at port 3307:3306 (to prevent potential conflict with any local db server).
+  - Create a container for Ecommerce app with corresponding database environment variables.
+- The app will be initialized at http://localhost:5000
+- Swagger API docs is available at http://localhost:5000/api-docs
+
+## **Login and access API Docs**
+- Access login page at http://localhost:5000/login
+  - Username: admin@gmail.com
+  - Password: qweQWE123!
+  - You will be logged in as ADMIN
+- The app will return a JSON with two properties
+  - Copy the JWT token to authorize with Product context
+- Go to Swagger API docs at http://localhost:5000/api-docs
+  - You are authenticated with User context through Spring Session
+  - To authenticate with Product context
+    - Click on the "Authorize" with Unlock icon
+    - Enter the JWT token and click "Authorize"
+
+</details>
+<details>
     <summary><strong style="font-size: 2.5em;">ecommerce - Current Progress</strong></summary>
 
-[My detailed design process in Notion](https://sphenoid-soybean-e9a.notion.site/E-Commerce-Project-15bce826ff1180ebae6ef3ef200f857b)
+- Currently, only the backend is set up with Swagger API docs.
+- Frontend will be integrated later.
+
+- [My detailed design process in Notion](https://sphenoid-soybean-e9a.notion.site/E-Commerce-Project-15bce826ff1180ebae6ef3ef200f857b)
 
 ## **User Context**
 
-- Enforce RBAC authorization on endpoints.
 - Increase test coverage.
 
 ## **Product Context**
 - Develop the business logic for adding, removing, updating products.
 - Only sellers can add/update/remove products.
-- Implement Central Token Verification Service to secure communication from/to User Context.
-
 
 </details>
 

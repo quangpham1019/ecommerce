@@ -1,0 +1,55 @@
+services:
+
+#  frontend:
+#    image: quangpham1019/ecommerce:frontend
+#    container_name: ecommerce_frontend
+#    ports:
+#      - "80:80"
+#    depends_on:
+#      - ecommerce_backend
+#    environment:
+#      - BACKEND_URL=http://ecommerce_backend:8080
+#    networks:
+#      - ecommerce_network
+
+  backend:
+    image: ecommerce
+    container_name: ecommerce_backend
+    environment:
+      - DB_HOST=mysql-service
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=kccvmck2
+    ports:
+      - "5000:8080"
+    depends_on:
+      mysql-service:
+        condition: service_healthy
+    networks:
+      - ecommerce_network
+
+  mysql-service:
+    image: mysql:8
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: kccvmck2
+#      MYSQL_USER: ecommerce_user
+#      MYSQL_PASSWORD: kccvmck2
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ecommerce_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+volumes:
+  mysql_data:
+
+networks:
+  ecommerce_network:
+    driver: bridge
