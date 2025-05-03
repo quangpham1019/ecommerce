@@ -67,7 +67,9 @@ public class Product {
         if (getId() != null && product.getId() != null)
             return Objects.equals(getId(), product.getId());
 
-        return Objects.equals(getName(), product.getName());
+        return Objects.equals(getName(), product.getName())
+                && Objects.equals(getSellerId(), product.getSellerId())
+                && Objects.equals(getCategories(), product.getCategories());
     }
 
     @Override
@@ -77,6 +79,6 @@ public class Product {
 
         if (getId() != null) return Objects.hash(getId());
 
-        return Objects.hash(getName());
+        return Objects.hash(getName(), getSellerId(), getCategories());
     }
 }

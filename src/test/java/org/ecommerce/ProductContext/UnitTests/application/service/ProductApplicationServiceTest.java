@@ -2,7 +2,6 @@ package org.ecommerce.ProductContext.UnitTests.application.service;
 
 import org.ecommerce.product.application.dto.ProductCreateDTO;
 import org.ecommerce.product.application.dto.ProductDetailsDTO;
-import org.ecommerce.product.application.dto.ProductVariantCreateDTO;
 import org.ecommerce.product.application.dto.ProductVariantDetailsDTO;
 import org.ecommerce.product.application.mapper.interfaces.ProductMapper;
 import org.ecommerce.product.application.service.ProductApplicationService;
@@ -176,79 +175,64 @@ public class ProductApplicationServiceTest {
         verify(productRepository, never()).save(any(Product.class));
         verify(productMapper, never()).toProductDetailsDTO(any(Product.class));
     }
-
-    // Need refactoring for better readability and maintainability
     @Test
     void createProduct_ShouldReturnProductDetailsDTO_WhenProductIsValid() {
         // Arrange
-        BigDecimal price = BigDecimal.valueOf(100);
-        String currency = "USD";
-        Product savingProduct = null;
-        Category expectedCategory = new Category("Test Category", "test category description");
-
-        ProductVariantCreateDTO productVariantCreateDTO = new ProductVariantCreateDTO(
-                "primary variant name",
-                "variant description",
-                price,
-                currency,
-                "image URL",
-                null
+        Price price = new Price(
+                BigDecimal.valueOf(100),
+                "USD"
         );
-        ProductCreateDTO productCreateDTO = new ProductCreateDTO(
+        Category category = new Category(
+                "Test Category",
+                "test category description");
+
+        ProductCreateDTO productCreateDTO = new ProductCreateDTO();
+        productCreateDTO.setCategories(Set.of(1L));
+
+        Product newProduct = new Product(
                 1L,
-                "Not a duplicate",
-                "description",
-                productVariantCreateDTO,
-                Set.of(1L)
-        );
-
-        Price expectedPrice = new Price(
-                price,
-                currency
-        );
-        ProductVariant expectedPrimaryVariant = new ProductVariant(
-                productVariantCreateDTO.getProductVariantName(),
-                productVariantCreateDTO.getProductVariantDescription(),
-                expectedPrice,
-                productVariantCreateDTO.getImageUrl(),
-                savingProduct
-        );
-        savingProduct = new Product(
-                productCreateDTO.getSellerId(),
-                productCreateDTO.getName(),
-                productCreateDTO.getDescription(),
-                expectedPrimaryVariant,
+                "new product",
+                "new product description",
+                new ProductVariant(
+                        "primary variant name",
+                        "primary variant description",
+                        price,
+                        "image URL",
+                        null
+                ),
                 null
         );
 
-        ProductVariantDetailsDTO expectedVariantDetails = new ProductVariantDetailsDTO(
-                productVariantCreateDTO.getProductVariantName(),
-                productVariantCreateDTO.getProductVariantDescription(),
-                productVariantCreateDTO.getImageUrl(),
-                expectedPrice
-        );
-        ProductDetailsDTO expectedProduct = new ProductDetailsDTO(
-                productCreateDTO.getName(),
-                productCreateDTO.getDescription(),
-                Set.of(expectedVariantDetails),
-                Set.of(expectedCategory)
+        ProductDetailsDTO expected = new ProductDetailsDTO(
+                "new product",
+                "new product description",
+                Set.of(new ProductVariantDetailsDTO(
+                                "primary variant name",
+                                "primary variant description",
+                                "image URL",
+                                price)),
+                Set.of(category)
         );
 
-        when(productRepository.existsByNameAndSellerIdAndCategoryIds(
-                productCreateDTO.getName(),
-                productCreateDTO.getSellerId(),
-                productCreateDTO.getCategories()
-        )).thenReturn(false);
-        when(productMapper.toProduct(productCreateDTO)).thenReturn(savingProduct);
-        when(categoryRepository.findAllById(Set.of(1L))).thenReturn(List.of(expectedCategory));
-        when(productRepository.save(savingProduct)).thenReturn(savingProduct);
-        when(productMapper.toProductDetailsDTO(savingProduct)).thenReturn(expectedProduct);
+        when(productRepository.existsByNameAndSellerIdAndCategoryIds(any(),any(),any()))
+                .thenReturn(false);
+        when(productMapper.toProduct(productCreateDTO))
+                .thenReturn(newProduct);
+        when(categoryRepository.findAllById(Set.of(1L)))
+                .thenReturn(List.of(category));
+        when(productRepository.save(newProduct))
+                .thenReturn(newProduct);
+        when(productMapper.toProductDetailsDTO(newProduct))
+                .thenReturn(expected);
 
         // Act
         ProductDetailsDTO actual = productApplicationService.createProduct(productCreateDTO);
 
         // Assert
         assertNotNull(actual);
-        assertEquals(expectedProduct, actual);
+        assertEquals(expected, actual);
+        assertEquals(newProduct.getPrimaryVariant().getProduct(), newProduct);
+        assertEquals(newProduct.getProductVariants().size(), 1);
+        assertNotNull(newProduct.getCategories());
     }
 }

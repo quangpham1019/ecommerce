@@ -60,19 +60,7 @@ public class ProductApplicationService {
 
         if (product.isEmpty()) throw new IllegalArgumentException("Product not found");
 
-        ProductDetailsDTO productDetailsDTO = productMapper.toProductDetailsDTO(product.get());
-//        List<ProductVariant> associatedProductVariants = productVariantRepository.findByProductId(productId);
-        Set<ProductVariant> associatedProductVariants = product.get().getProductVariants();
-
-        Set<ProductVariantDetailsDTO> productVariantDetailsDTOsSet = associatedProductVariants
-                .stream()
-                .map(productMapper::toProductVariantDetailsDTO)
-                .collect(Collectors.toSet());
-
-        productDetailsDTO.setProductVariants(productVariantDetailsDTOsSet);
-//        productDetailsDTO.setCategories(product.get().getCategories());
-
-        return productDetailsDTO;
+        return mapProductToProductDetailsDTO(product.get());
     }
 
     public ProductVariantDetailsDTO getProductVariantDetailsById(Long productVariantId) {
@@ -101,10 +89,21 @@ public class ProductApplicationService {
                 .findAllById(productCreateDTO.getCategories()));
 
         product.setCategories(categories);
-
         return productMapper.toProductDetailsDTO(productRepository.save(product));
-
     }
 
+    public ProductDetailsDTO mapProductToProductDetailsDTO(Product product) {
 
+        ProductDetailsDTO productDetailsDTO = productMapper.toProductDetailsDTO(product);
+        Set<ProductVariant> associatedProductVariants = product.getProductVariants();
+
+        Set<ProductVariantDetailsDTO> productVariantDetailsDTOsSet = associatedProductVariants
+                .stream()
+                .map(productMapper::toProductVariantDetailsDTO)
+                .collect(Collectors.toSet());
+
+        productDetailsDTO.setProductVariants(productVariantDetailsDTOsSet);
+
+        return productDetailsDTO;
+    }
 }
