@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    properties:
+      hibernate:
+        generate_statistics: false
+
+logging:
+  level:
+    com.amazonclone.ecommerce: INFO
+
