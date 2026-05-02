@@ -11,6 +11,14 @@ This repository contains the Week 1 foundation for a solo-built ecommerce platfo
 - Initial schema migration created
 - Product and architecture docs written
 
+## Week 2 outcomes
+
+- GitHub Actions CI workflow added
+- Dev deployment workflow skeleton added
+- Local MySQL bootstrapping with Docker Compose added
+- Request correlation and global API error handling added
+- EC2 deployment runbook and environment template added
+
 ## Tech stack
 
 - Java 21
@@ -39,15 +47,26 @@ This repository contains the Week 1 foundation for a solo-built ecommerce platfo
 
 ## Local development
 
-1. Create a MySQL database named `ecommerce`.
-2. Set environment variables:
+1. Copy the environment template if you want a local file-driven setup:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+2. Start MySQL locally:
+
+```powershell
+docker compose up -d mysql
+```
+
+3. Set environment variables:
 
 ```powershell
 $env:DB_USERNAME="root"
 $env:DB_PASSWORD="your-password"
 ```
 
-3. Run the application:
+4. Run the application:
 
 ```powershell
 mvn spring-boot:run
@@ -73,4 +92,10 @@ mvn test
 - [Architecture](docs/architecture.md)
 - [Modules](docs/modules.md)
 - [Backlog](docs/backlog.md)
+- [Dev Deployment Runbook](docs/runbooks/dev-deployment.md)
+
+## CI/CD
+
+- `.github/workflows/ci.yml` runs build/test on pushes and PRs
+- `.github/workflows/deploy-dev.yml` is a manual dev deployment skeleton for EC2-based delivery
 

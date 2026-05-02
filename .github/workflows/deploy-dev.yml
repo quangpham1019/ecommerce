@@ -1,0 +1,59 @@
+name: Deploy Dev
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to deploy
+        required: true
+        default: codex/week-1-foundation
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Build artifact
+        run: mvn --batch-mode --no-transfer-progress clean package -DskipTests
+
+      - name: Upload artifact to workflow
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecommerce-jar
+          path: target/*.jar
+
+      - name: Deploy to EC2 over SSH
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEV_EC2_HOST }}
+          username: ${{ secrets.DEV_EC2_USERNAME }}
+          key: ${{ secrets.DEV_EC2_SSH_KEY }}
+          source: "target/*.jar"
+          target: "/opt/ecommerce/releases"
+
+      - name: Restart remote service
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_EC2_HOST }}
+          username: ${{ secrets.DEV_EC2_USERNAME }}
+          key: ${{ secrets.DEV_EC2_SSH_KEY }}
+          script: |
+            sudo mkdir -p /opt/ecommerce/current
+            latest_jar=$(ls -t /opt/ecommerce/releases/target/*.jar | head -n 1)
+            sudo cp "$latest_jar" /opt/ecommerce/current/ecommerce.jar
+            sudo systemctl restart ecommerce-dev
+            sudo systemctl status ecommerce-dev --no-pager
+

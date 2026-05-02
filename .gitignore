@@ -5,5 +5,5 @@ target/
 *.iml
 *.log
 .env
+.env.*
 .DS_Store
-
